@@ -39,6 +39,17 @@ public class PageController {
     }
 
     /**
+     * 管理员工作台
+     */
+    @GetMapping("/admin")
+    public String admin(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin";
+    }
+
+    /**
      * 学生实验详情页面
      */
     @GetMapping("/student/experiments/{id}")
@@ -54,7 +65,6 @@ public class PageController {
         model.addAttribute("experimentId", id);
         return "experiment-detail";
     }
-
 
     /**
      * 学生实验报告页面
@@ -73,7 +83,6 @@ public class PageController {
         return "report";
     }
 
-
     /**
      * 判断当前用户是否为已登录学生
      */
@@ -89,5 +98,22 @@ public class PageController {
         return user != null
                 && user.getId() != null
                 && "STUDENT".equals(user.getRole());
+    }
+
+    /**
+     * 判断当前用户是否为已登录管理员
+     */
+    private boolean isAdmin(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+
+        if (session == null) {
+            return false;
+        }
+
+        SysUser user = (SysUser) session.getAttribute("loginUser");
+
+        return user != null
+                && user.getId() != null
+                && "ADMIN".equals(user.getRole());
     }
 }

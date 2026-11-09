@@ -1,0 +1,261 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员工作台 - Web漏洞实验教学平台</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Microsoft YaHei", Arial, sans-serif;
+            background: #f4f6fa;
+            color: #263248;
+        }
+
+        .header {
+            height: 68px;
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        }
+
+        .brand {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        .user-area {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            font-size: 14px;
+        }
+
+        .logout-button {
+            border: none;
+            background: #eff4ff;
+            color: #2563eb;
+            padding: 9px 18px;
+            border-radius: 7px;
+            cursor: pointer;
+        }
+
+        .logout-button:hover {
+            background: #dce8ff;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 35px auto;
+            padding: 0 20px;
+        }
+
+        .welcome {
+            margin-bottom: 28px;
+        }
+
+        .welcome h1 {
+            font-size: 26px;
+            margin-bottom: 10px;
+        }
+
+        .welcome p {
+            color: #7b8798;
+            font-size: 14px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin-bottom: 18px;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 18px;
+            margin-bottom: 35px;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .stat-label {
+            color: #8490a2;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .stat-value {
+            font-size: 30px;
+            font-weight: bold;
+            color: #263248;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .menu-card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0, 0, 0, 0.03);
+        }
+
+        .menu-card h3 {
+            font-size: 17px;
+            margin-bottom: 10px;
+        }
+
+        .menu-card p {
+            font-size: 14px;
+            line-height: 1.7;
+            color: #8490a2;
+        }
+
+        .menu-status {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            background: #f1f5f9;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .page-footer {
+            text-align: center;
+            color: #a0aaba;
+            font-size: 13px;
+            padding: 35px 0;
+        }
+
+        @media (max-width: 800px) {
+            .stat-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header {
+                padding: 0 18px;
+            }
+        }
+
+        @media (max-width: 450px) {
+            .stat-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .brand {
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="header">
+    <div class="brand">Web漏洞实验教学平台</div>
+
+    <div class="user-area">
+        <span id="adminName">管理员</span>
+        <button class="logout-button" id="logoutButton">
+            退出登录
+        </button>
+    </div>
+</header>
+
+<main class="container">
+
+    <section class="welcome">
+        <h1>管理员工作台</h1>
+        <p>欢迎使用 Web 漏洞实验教学平台管理系统。</p>
+    </section>
+
+    <h2 class="section-title">平台数据概览</h2>
+
+    <section class="stat-grid">
+
+        <div class="stat-card">
+            <div class="stat-label">平台用户总数</div>
+            <div class="stat-value" id="userCount">--</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">实验资源总数</div>
+            <div class="stat-value" id="experimentCount">--</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">漏洞知识总数</div>
+            <div class="stat-value" id="vulnerabilityCount">--</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-label">待审核报告</div>
+            <div class="stat-value" id="pendingCount">--</div>
+        </div>
+
+    </section>
+
+    <h2 class="section-title">平台管理功能</h2>
+
+    <section class="menu-grid">
+
+        <div class="menu-card">
+            <h3>用户管理</h3>
+            <p>查看平台用户信息，管理学生账号状态及用户角色。</p>
+            <span class="menu-status">功能开发中</span>
+        </div>
+
+        <div class="menu-card">
+            <h3>实验资源管理</h3>
+            <p>维护实验资源，配置实验名称、难度、实验步骤及靶场入口。</p>
+            <span class="menu-status">功能开发中</span>
+        </div>
+
+        <div class="menu-card">
+            <h3>漏洞知识管理</h3>
+            <p>维护漏洞知识内容，管理漏洞分类及教学资料。</p>
+            <span class="menu-status">功能开发中</span>
+        </div>
+
+        <div class="menu-card">
+            <h3>实验报告审核</h3>
+            <p>查看学生提交的实验报告，进行审核、评分及评语反馈。</p>
+            <span class="menu-status">功能开发中</span>
+        </div>
+
+    </section>
+
+</main>
+
+<footer class="page-footer">
+    基于 Java Web 的 Web 漏洞实验教学平台
+</footer>
+
+<script src="/js/admin.js"></script>
+
+</body>
+</html>

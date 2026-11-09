@@ -61,7 +61,9 @@ if (loginForm) {
                 window.location.href = "/student";
 
             } else if (user.role === "ADMIN") {
-                showMessage("管理员登录成功，管理员工作台将在后续步骤开放。", "success");
+                showMessage("管理员登录成功，正在进入管理员工作台...", "success");
+
+                window.location.href = "/admin";
 
             } else {
                 showMessage("账号角色异常，请联系管理员。", "error");
