@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# 用户上传的实验报告附件
+/uploads/
