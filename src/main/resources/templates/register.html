@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户注册 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/auth.css">
+</head>
+<body>
+
+<div class="auth-page">
+    <div class="auth-container">
+
+        <div class="brand">
+            <div class="brand-icon">W</div>
+            <div>
+                <h1>Web漏洞实验教学平台</h1>
+                <p>Web Security Learning Platform</p>
+            </div>
+        </div>
+
+        <div class="auth-card">
+            <div class="card-heading">
+                <h2>创建账号</h2>
+                <p>注册账号，开启你的网络安全学习之旅</p>
+            </div>
+
+            <form id="registerForm">
+
+                <div class="form-group">
+                    <label for="username">用户名</label>
+                    <input
+                            type="text"
+                            id="username"
+                            name="username"
+                            placeholder="请输入4到50位用户名"
+                            minlength="4"
+                            maxlength="50"
+                            autocomplete="username"
+                            required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">密码</label>
+                    <input
+                            type="password"
+                            id="password"
+                            name="password"
+                            placeholder="请输入8到64位密码"
+                            minlength="8"
+                            maxlength="64"
+                            autocomplete="new-password"
+                            required>
+                </div>
+
+                <div class="form-group">
+                    <label for="nickname">昵称</label>
+                    <input
+                            type="text"
+                            id="nickname"
+                            name="nickname"
+                            placeholder="请输入昵称"
+                            maxlength="50"
+                            required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">邮箱 <span class="optional">选填</span></label>
+                    <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            placeholder="请输入邮箱地址"
+                            maxlength="100"
+                            autocomplete="email">
+                </div>
+
+                <div id="message" class="message" role="alert"></div>
+
+                <button type="submit" id="registerButton" class="submit-button">
+                    注册账号
+                </button>
+
+            </form>
+
+            <div class="auth-footer">
+                已有账号？
+                <a href="/login">返回登录</a>
+            </div>
+        </div>
+
+        <div class="page-footer">
+            基于 Java Web 的 Web 漏洞实验教学平台
+        </div>
+
+    </div>
+</div>
+
+<script src="/js/auth.js"></script>
+</body>
+</html>

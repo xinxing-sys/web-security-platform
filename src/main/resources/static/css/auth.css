@@ -1,0 +1,132 @@
+function showMessage(message, type) {
+    const element = document.getElementById("message");
+
+    if (!element) {
+        return;
+    }
+
+    element.textContent = message;
+    element.className = "message " + type;
+}
+
+function setButtonLoading(button, loading, normalText) {
+    if (!button) {
+        return;
+    }
+
+    button.disabled = loading;
+    button.textContent = loading ? "请稍候..." : normalText;
+}
+
+// 登录
+const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+    loginForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const button = document.getElementById("loginButton");
+
+        showMessage("", "");
+        setButtonLoading(button, true, "登录");
+
+        try {
+            const response = await fetch("/api/user/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                showMessage(result.message || "登录失败", "error");
+                return;
+            }
+
+            const user = result.data;
+
+            if (user.role === "STUDENT") {
+                showMessage("登录成功，正在进入学生工作台...", "success");
+
+                setTimeout(function () {
+                    window.location.href = "/student";
+                }, 500);
+
+            } else if (user.role === "ADMIN") {
+                showMessage("管理员登录成功，管理员工作台将在后续步骤开放。", "success");
+
+            } else {
+                showMessage("账号角色异常，请联系管理员。", "error");
+            }
+
+        } catch (error) {
+            showMessage("网络异常，无法连接服务器。", "error");
+        } finally {
+            setButtonLoading(button, false, "登录");
+        }
+    });
+}
+
+// 注册
+const registerForm = document.getElementById("registerForm");
+
+if (registerForm) {
+    registerForm.addEventListener("submit", async function (event) {
+        event.preventDefault();
+
+        const username = document.getElementById("username").value.trim();
+        const password = document.getElementById("password").value;
+        const nickname = document.getElementById("nickname").value.trim();
+        const email = document.getElementById("email").value.trim();
+
+        const button = document.getElementById("registerButton");
+
+        showMessage("", "");
+        setButtonLoading(button, true, "注册账号");
+
+        try {
+            const response = await fetch("/api/user/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                credentials: "same-origin",
+                body: JSON.stringify({
+                    username: username,
+                    password: password,
+                    nickname: nickname,
+                    email: email || null
+                })
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                showMessage(result.message || "注册失败", "error");
+                return;
+            }
+
+            showMessage("注册成功！即将跳转登录页面。", "success");
+
+            registerForm.reset();
+
+            setTimeout(function () {
+                window.location.href = "/login";
+            }, 1200);
+
+        } catch (error) {
+            showMessage("网络异常，无法连接服务器。", "error");
+        } finally {
+            setButtonLoading(button, false, "注册账号");
+        }
+    });
+}

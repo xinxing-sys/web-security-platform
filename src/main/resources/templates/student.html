@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>学生工作台 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/student.css">
+</head>
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <div class="brand-icon">W</div>
+            <div>
+                <h2>Web安全平台</h2>
+                <span>学习管理系统</span>
+            </div>
+        </div>
+
+        <div class="nav-title">工作台</div>
+
+        <a href="#overview" class="nav-item active">工作台首页</a>
+        <a href="#experiments" class="nav-item">实验资源</a>
+        <a href="#vulnerabilities" class="nav-item">漏洞知识</a>
+        <a href="#tasks" class="nav-item">我的任务</a>
+
+        <div class="sidebar-bottom">
+            <div class="sidebar-user">
+                <div class="avatar" id="sidebarAvatar">学</div>
+                <div class="user-info">
+                    <strong id="sidebarName">加载中</strong>
+                    <span>学生账号</span>
+                </div>
+            </div>
+
+            <button id="logoutButton" class="logout-button">退出登录</button>
+        </div>
+    </aside>
+
+    <main class="main-content">
+
+        <header class="topbar">
+            <div>
+                <h1>学生工作台</h1>
+                <p>欢迎使用 Web 漏洞实验教学平台</p>
+            </div>
+
+            <div class="topbar-user">
+                <span id="topbarName">加载中</span>
+                <div class="avatar small-avatar" id="topbarAvatar">学</div>
+            </div>
+        </header>
+
+        <section class="welcome-section" id="overview">
+            <div>
+                <span class="welcome-label">STUDENT DASHBOARD</span>
+                <h2>你好，<span id="welcomeName">同学</span></h2>
+                <p>欢迎回来，今天也开始学习网络安全知识吧。</p>
+            </div>
+            <div class="welcome-decoration">WEB<br>SECURITY</div>
+        </section>
+
+        <section class="statistics">
+            <div class="stat-card">
+                <div class="stat-label">实验资源</div>
+                <div class="stat-value" id="experimentCount">--</div>
+                <div class="stat-desc">可参与的实验</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">漏洞知识</div>
+                <div class="stat-value" id="vulnerabilityCount">--</div>
+                <div class="stat-desc">可学习的知识</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">我的任务</div>
+                <div class="stat-value" id="taskCount">--</div>
+                <div class="stat-desc">已领取的实验任务</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-label">已完成任务</div>
+                <div class="stat-value" id="completedCount">--</div>
+                <div class="stat-desc">审核通过的任务</div>
+            </div>
+        </section>
+
+        <section class="content-section" id="experiments">
+            <div class="section-heading">
+                <div>
+                    <h2>实验资源</h2>
+                    <p>选择实验，学习常见 Web 安全漏洞</p>
+                </div>
+                <span class="section-tag">EXPERIMENTS</span>
+            </div>
+
+            <div id="experimentList" class="resource-grid">
+                <div class="loading">正在加载实验资源...</div>
+            </div>
+        </section>
+
+        <section class="content-section" id="vulnerabilities">
+            <div class="section-heading">
+                <div>
+                    <h2>漏洞知识</h2>
+                    <p>了解常见 Web 漏洞原理与防御方法</p>
+                </div>
+                <span class="section-tag">KNOWLEDGE</span>
+            </div>
+
+            <div id="vulnerabilityList" class="knowledge-list">
+                <div class="loading">正在加载漏洞知识...</div>
+            </div>
+        </section>
+
+        <section class="content-section" id="tasks">
+            <div class="section-heading">
+                <div>
+                    <h2>我的实验任务</h2>
+                    <p>查看已经领取的实验任务及进度</p>
+                </div>
+                <span class="section-tag">MY TASKS</span>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>任务编号</th>
+                        <th>实验编号</th>
+                        <th>任务状态</th>
+                        <th>领取时间</th>
+                    </tr>
+                    </thead>
+                    <tbody id="taskList">
+                    <tr>
+                        <td colspan="4" class="loading">正在加载任务...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer class="footer">
+            基于 Java Web 的 Web 漏洞实验教学平台
+        </footer>
+
+    </main>
+</div>
+
+<script src="/js/student.js"></script>
+</body>
+</html>
