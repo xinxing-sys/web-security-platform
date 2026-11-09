@@ -113,33 +113,32 @@ function renderTaskState() {
  */
 function getLabUrl() {
     const configuredUrl = currentExperiment?.platformUrl;
+    const lessonCode = currentExperiment?.lessonCode;
 
-    const rawUrl = configuredUrl && configuredUrl.trim()
-        ? configuredUrl.trim()
-        : "http://localhost:8081/WebGoat";
+    // 优先使用实验配置的完整地址
+    if (configuredUrl && configuredUrl.trim()) {
+        const url = new URL(configuredUrl.trim());
 
-    let url;
-
-    try {
-        if (rawUrl.startsWith("/")) {
-            url = new URL(rawUrl, "http://localhost:8081");
-        } else {
-            url = new URL(rawUrl);
+        if (
+            !["http:", "https:"].includes(url.protocol) ||
+            !["localhost", "127.0.0.1"].includes(url.hostname)
+        ) {
+            throw new Error("实验靶场地址不符合本机实验环境要求");
         }
-    } catch (error) {
-        throw new Error("实验靶场地址格式不正确");
+
+        return url.href;
     }
 
-    const allowedHosts = ["localhost", "127.0.0.1"];
-
+    // 没有配置完整地址时，根据 WebGoat 课程编号生成入口
     if (
-        !["http:", "https:"].includes(url.protocol) ||
-        !allowedHosts.includes(url.hostname)
+        currentExperiment?.platformType === "WEBGOAT" &&
+        lessonCode &&
+        /^[a-zA-Z0-9_-]+\.lesson$/.test(lessonCode)
     ) {
-        throw new Error("实验靶场地址不符合本机实验环境要求");
+        return `http://localhost:8081/WebGoat/start.mvc?username=student01#lesson/${lessonCode}`;
     }
 
-    return url.href;
+    throw new Error("实验尚未配置有效的靶场入口或课程编号");
 }
 
 /**
