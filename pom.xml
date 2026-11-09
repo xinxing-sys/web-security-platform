@@ -98,6 +98,13 @@
 			<artifactId>jackson-databind</artifactId>
 		</dependency>
 
+		<!-- MyBatis-Plus 分页插件依赖 -->
+		<dependency>
+			<groupId>com.baomidou</groupId>
+			<artifactId>mybatis-plus-jsqlparser</artifactId>
+			<version>3.5.18</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>
