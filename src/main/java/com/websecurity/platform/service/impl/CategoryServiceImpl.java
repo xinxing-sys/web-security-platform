@@ -1,8 +1,11 @@
+
 package com.websecurity.platform.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.websecurity.platform.entity.SysCategory;
+import com.websecurity.platform.entity.Vulnerability;
 import com.websecurity.platform.mapper.SysCategoryMapper;
+import com.websecurity.platform.mapper.VulnerabilityMapper;
 import com.websecurity.platform.service.CategoryService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,9 +16,13 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
 
     private final SysCategoryMapper categoryMapper;
+    private final VulnerabilityMapper vulnerabilityMapper;
 
-    public CategoryServiceImpl(SysCategoryMapper categoryMapper) {
+    public CategoryServiceImpl(
+            SysCategoryMapper categoryMapper,
+            VulnerabilityMapper vulnerabilityMapper) {
         this.categoryMapper = categoryMapper;
+        this.vulnerabilityMapper = vulnerabilityMapper;
     }
 
     @Override
@@ -69,6 +76,9 @@ public class CategoryServiceImpl implements CategoryService {
             category.setSortOrder(0);
         }
 
+        // 新增分类时不允许客户端指定数据库主键
+        category.setId(null);
+
         categoryMapper.insert(category);
     }
 
@@ -113,7 +123,20 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     @Transactional
     public void delete(Long id) {
+        // 先确认分类存在
         getById(id);
+
+        // 检查是否有漏洞知识正在使用该分类
+        Long count = vulnerabilityMapper.selectCount(
+                new LambdaQueryWrapper<Vulnerability>()
+                        .eq(Vulnerability::getCategoryId, id)
+        );
+
+        if (count != null && count > 0) {
+            throw new IllegalArgumentException(
+                    "该分类下存在漏洞知识，不能删除，请先处理关联的漏洞知识"
+            );
+        }
 
         categoryMapper.deleteById(id);
     }
