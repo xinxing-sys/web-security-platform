@@ -88,6 +88,25 @@ public class PageController {
         return "experiment-detail";
     }
 
+    /**
+     * 学生漏洞知识详情页面
+     */
+    @GetMapping("/student/knowledge/{id}")
+    public String vulnerabilityDetail(
+            @PathVariable Long id,
+            HttpServletRequest request,
+            Model model) {
+
+        if (!isStudent(request)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("vulnerabilityId", id);
+        return "vulnerability-detail";
+    }
+
+
+
 
     /**
      * 管理员实验资源管理页面

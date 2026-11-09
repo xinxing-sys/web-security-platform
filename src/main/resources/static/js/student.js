@@ -113,15 +113,25 @@ async function loadVulnerabilities() {
         const records = data.records || [];
 
         if (records.length === 0) {
-            container.innerHTML = '<div class="empty">暂时没有可学习的漏洞知识</div>';
+            container.innerHTML =
+                '<div class="empty">暂时没有可学习的漏洞知识</div>';
             return;
         }
 
         container.innerHTML = records.map(item => `
-            <div class="knowledge-card">
+            <a
+                class="knowledge-card knowledge-link"
+                href="/student/knowledge/${encodeURIComponent(item.id)}"
+                aria-label="查看漏洞知识：${escapeHtml(item.title)}"
+            >
                 <h3>${escapeHtml(item.title)}</h3>
+
                 <p>${escapeHtml(item.summary || "暂无知识简介")}</p>
-            </div>
+
+                <div class="knowledge-enter">
+                    查看知识详情 →
+                </div>
+            </a>
         `).join("");
 
     } catch (error) {
