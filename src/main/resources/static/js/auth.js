@@ -1,20 +1,15 @@
-/**
- * 显示页面提示信息
- */
-function showMessage(message, type) {
-    const messageElement = document.getElementById("message");
 
-    if (!messageElement) {
+function showMessage(message, type) {
+    const element = document.getElementById("message");
+
+    if (!element) {
         return;
     }
 
-    messageElement.textContent = message;
-    messageElement.className = "message " + type;
+    element.textContent = message;
+    element.className = "message " + type;
 }
 
-/**
- * 设置按钮状态
- */
 function setButtonLoading(button, loading, normalText) {
     if (!button) {
         return;
@@ -24,9 +19,7 @@ function setButtonLoading(button, loading, normalText) {
     button.textContent = loading ? "请稍候..." : normalText;
 }
 
-/**
- * 用户登录
- */
+// 登录
 const loginForm = document.getElementById("loginForm");
 
 if (loginForm) {
@@ -56,38 +49,34 @@ if (loginForm) {
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                showMessage(
-                    result.message || "登录失败，请检查用户名和密码",
-                    "error"
-                );
+                showMessage(result.message || "登录失败", "error");
                 return;
             }
 
             const user = result.data;
 
-            showMessage(
-                "登录成功！欢迎回来，" +
-                (user.nickname || user.username) +
-                "。账号身份：" +
-                (user.role === "ADMIN" ? "管理员" : "学生") +
-                "。",
-                "success"
-            );
+            if (user.role === "STUDENT") {
+                showMessage("登录成功，正在进入学生工作台...", "success");
 
-            // 登录接口已经创建 Session。
-            // 工作台页面将在后续步骤中接入。
+                window.location.href = "/student";
+
+            } else if (user.role === "ADMIN") {
+                showMessage("管理员登录成功，管理员工作台将在后续步骤开放。", "success");
+
+            } else {
+                showMessage("账号角色异常，请联系管理员。", "error");
+            }
 
         } catch (error) {
-            showMessage("网络异常，无法连接服务器，请检查平台是否正常运行。", "error");
+            console.error("登录请求异常：", error);
+            showMessage("网络异常，无法连接服务器。", "error");
         } finally {
             setButtonLoading(button, false, "登录");
         }
     });
 }
 
-/**
- * 用户注册
- */
+// 注册
 const registerForm = document.getElementById("registerForm");
 
 if (registerForm) {
@@ -122,18 +111,11 @@ if (registerForm) {
             const result = await response.json();
 
             if (!response.ok || !result.success) {
-                showMessage(
-                    result.message || "注册失败，请检查填写的信息",
-                    "error"
-                );
+                showMessage(result.message || "注册失败", "error");
                 return;
             }
 
-            showMessage(
-                "注册成功！即将跳转到登录页面。",
-                "success"
-            );
-
+            showMessage("注册成功！即将跳转登录页面。", "success");
             registerForm.reset();
 
             setTimeout(function () {
@@ -141,7 +123,8 @@ if (registerForm) {
             }, 1200);
 
         } catch (error) {
-            showMessage("网络异常，无法连接服务器，请检查平台是否正常运行。", "error");
+            console.error("注册请求异常：", error);
+            showMessage("网络异常，无法连接服务器。", "error");
         } finally {
             setButtonLoading(button, false, "注册账号");
         }

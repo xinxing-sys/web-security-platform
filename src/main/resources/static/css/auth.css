@@ -1,132 +1,198 @@
-function showMessage(message, type) {
-    const element = document.getElementById("message");
 
-    if (!element) {
-        return;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    min-height: 100vh;
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+    color: #1e293b;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(59, 130, 246, 0.22), transparent 32%),
+        radial-gradient(circle at 85% 80%, rgba(14, 165, 233, 0.18), transparent 32%),
+        linear-gradient(135deg, #0f172a, #172554 55%, #1e3a8a);
+}
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 440px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 28px;
+    color: #fff;
+}
+
+.brand-icon {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 15px;
+    background: linear-gradient(135deg, #3b82f6, #06b6d4);
+    color: #fff;
+    font-size: 28px;
+    font-weight: 800;
+    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.35);
+}
+
+.brand h1 {
+    font-size: 21px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.brand p {
+    margin-top: 5px;
+    color: #bfdbfe;
+    font-size: 12px;
+    letter-spacing: 1px;
+}
+
+.auth-card {
+    padding: 36px 34px;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-radius: 18px;
+    background: #fff;
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.25);
+}
+
+.card-heading {
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+.card-heading h2 {
+    color: #0f172a;
+    font-size: 25px;
+    font-weight: 700;
+}
+
+.card-heading p {
+    margin-top: 10px;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 9px;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.form-group input {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    outline: none;
+    background: #f8fafc;
+    color: #0f172a;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+    border-color: #3b82f6;
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.13);
+}
+
+.form-group input::placeholder {
+    color: #94a3b8;
+}
+
+.message {
+    min-height: 20px;
+    margin: 0 0 12px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.message.error {
+    color: #dc2626;
+}
+
+.message.success {
+    color: #059669;
+}
+
+.submit-button {
+    width: 100%;
+    height: 46px;
+    border: none;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #2563eb, #0891b2);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.submit-button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 7px 18px rgba(37, 99, 235, 0.25);
+}
+
+.submit-button:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.auth-footer {
+    margin-top: 24px;
+    color: #64748b;
+    font-size: 14px;
+    text-align: center;
+}
+
+.auth-footer a {
+    color: #2563eb;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.auth-footer a:hover {
+    text-decoration: underline;
+}
+
+.page-footer {
+    margin-top: 24px;
+    color: #cbd5e1;
+    font-size: 12px;
+    text-align: center;
+}
+
+@media (max-width: 480px) {
+    .auth-card {
+        padding: 28px 22px;
     }
 
-    element.textContent = message;
-    element.className = "message " + type;
-}
-
-function setButtonLoading(button, loading, normalText) {
-    if (!button) {
-        return;
+    .brand h1 {
+        font-size: 18px;
     }
-
-    button.disabled = loading;
-    button.textContent = loading ? "请稍候..." : normalText;
-}
-
-// 登录
-const loginForm = document.getElementById("loginForm");
-
-if (loginForm) {
-    loginForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value;
-        const button = document.getElementById("loginButton");
-
-        showMessage("", "");
-        setButtonLoading(button, true, "登录");
-
-        try {
-            const response = await fetch("/api/user/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "same-origin",
-                body: JSON.stringify({
-                    username: username,
-                    password: password
-                })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                showMessage(result.message || "登录失败", "error");
-                return;
-            }
-
-            const user = result.data;
-
-            if (user.role === "STUDENT") {
-                showMessage("登录成功，正在进入学生工作台...", "success");
-
-                setTimeout(function () {
-                    window.location.href = "/student";
-                }, 500);
-
-            } else if (user.role === "ADMIN") {
-                showMessage("管理员登录成功，管理员工作台将在后续步骤开放。", "success");
-
-            } else {
-                showMessage("账号角色异常，请联系管理员。", "error");
-            }
-
-        } catch (error) {
-            showMessage("网络异常，无法连接服务器。", "error");
-        } finally {
-            setButtonLoading(button, false, "登录");
-        }
-    });
-}
-
-// 注册
-const registerForm = document.getElementById("registerForm");
-
-if (registerForm) {
-    registerForm.addEventListener("submit", async function (event) {
-        event.preventDefault();
-
-        const username = document.getElementById("username").value.trim();
-        const password = document.getElementById("password").value;
-        const nickname = document.getElementById("nickname").value.trim();
-        const email = document.getElementById("email").value.trim();
-
-        const button = document.getElementById("registerButton");
-
-        showMessage("", "");
-        setButtonLoading(button, true, "注册账号");
-
-        try {
-            const response = await fetch("/api/user/register", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                credentials: "same-origin",
-                body: JSON.stringify({
-                    username: username,
-                    password: password,
-                    nickname: nickname,
-                    email: email || null
-                })
-            });
-
-            const result = await response.json();
-
-            if (!response.ok || !result.success) {
-                showMessage(result.message || "注册失败", "error");
-                return;
-            }
-
-            showMessage("注册成功！即将跳转登录页面。", "success");
-
-            registerForm.reset();
-
-            setTimeout(function () {
-                window.location.href = "/login";
-            }, 1200);
-
-        } catch (error) {
-            showMessage("网络异常，无法连接服务器。", "error");
-        } finally {
-            setButtonLoading(button, false, "注册账号");
-        }
-    });
 }

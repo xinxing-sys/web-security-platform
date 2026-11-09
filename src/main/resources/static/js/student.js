@@ -69,14 +69,25 @@ async function loadExperiments() {
         }
 
         container.innerHTML = records.map(item => `
-            <div class="resource-card">
+            <a
+                class="resource-card resource-link"
+                href="/student/experiments/${encodeURIComponent(item.id)}"
+                aria-label="查看实验：${escapeHtml(item.name)}"
+            >
                 <h3>${escapeHtml(item.name)}</h3>
+
                 <p>${escapeHtml(item.description || "暂无实验介绍")}</p>
+
                 <div class="resource-meta">
-                    <span class="difficulty">${escapeHtml(item.difficulty || "未设置难度")}</span>
+                    <span class="difficulty">
+                        ${escapeHtml(item.difficulty || "未设置难度")}
+                    </span>
+
                     <span>实验编号：${escapeHtml(item.id)}</span>
                 </div>
-            </div>
+
+                <div class="resource-enter">查看实验详情 →</div>
+            </a>
         `).join("");
 
     } catch (error) {

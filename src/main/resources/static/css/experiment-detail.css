@@ -1,0 +1,306 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Microsoft YaHei", "Segoe UI", sans-serif;
+    background: #f5f7fb;
+    color: #1e293b;
+}
+
+.page-container {
+    min-height: 100vh;
+}
+
+.topbar {
+    height: 75px;
+    padding: 0 8%;
+    background: #ffffff;
+    border-bottom: 1px solid #e8edf5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.brand-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 11px;
+    background: #2563eb;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 23px;
+    font-weight: bold;
+}
+
+.brand strong {
+    display: block;
+    font-size: 15px;
+    color: #172554;
+}
+
+.brand span {
+    display: block;
+    margin-top: 4px;
+    font-size: 10px;
+    color: #94a3b8;
+}
+
+.back-link {
+    color: #2563eb;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    color: #1d4ed8;
+}
+
+.main-content {
+    width: 88%;
+    max-width: 1150px;
+    margin: 30px auto;
+}
+
+.breadcrumb {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.breadcrumb a {
+    color: #2563eb;
+    text-decoration: none;
+}
+
+.experiment-header {
+    padding: 42px;
+    border-radius: 15px;
+    color: white;
+    background: linear-gradient(115deg, #1e40af, #2563eb 65%, #60a5fa);
+    margin-bottom: 22px;
+}
+
+.eyebrow {
+    font-size: 11px;
+    letter-spacing: 2px;
+    opacity: 0.75;
+}
+
+.experiment-header h1 {
+    margin-top: 17px;
+    font-size: 29px;
+}
+
+.experiment-header p {
+    margin-top: 15px;
+    max-width: 750px;
+    font-size: 14px;
+    line-height: 1.9;
+    opacity: 0.85;
+}
+
+.meta-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 25px;
+}
+
+.meta-list span {
+    padding: 7px 12px;
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 6px;
+    font-size: 11px;
+    background: rgba(255,255,255,0.1);
+}
+
+.detail-card {
+    padding: 28px 32px;
+    margin-bottom: 18px;
+    background: white;
+    border: 1px solid #edf0f5;
+    border-radius: 12px;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.title-number {
+    color: #2563eb;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.section-title h2 {
+    font-size: 17px;
+}
+
+.section-title p {
+    margin-top: 5px;
+    color: #94a3b8;
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.detail-content {
+    padding-top: 22px;
+    color: #475569;
+    font-size: 14px;
+    line-height: 2;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.steps-content {
+    line-height: 2.2;
+}
+
+.detail-content p + p {
+    margin-top: 12px;
+}
+
+.notice {
+    padding: 13px 16px;
+    color: #92400e;
+    background: #fffbeb;
+    border-left: 3px solid #f59e0b;
+    border-radius: 5px;
+}
+
+.action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 27px 32px;
+    margin-top: 22px;
+    background: white;
+    border: 1px solid #edf0f5;
+    border-radius: 12px;
+}
+
+.action-card h2 {
+    font-size: 17px;
+}
+
+.action-card p {
+    margin-top: 9px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.action-card button {
+    padding: 12px 20px;
+    border: none;
+    border-radius: 7px;
+    background: #94a3b8;
+    color: white;
+    font-size: 12px;
+    cursor: not-allowed;
+}
+
+.message {
+    margin-top: 15px;
+    color: #dc2626;
+    font-size: 13px;
+    text-align: center;
+}
+
+.footer {
+    padding: 25px;
+    color: #94a3b8;
+    font-size: 11px;
+    text-align: center;
+}
+
+@media (max-width: 650px) {
+    .topbar {
+        padding: 0 5%;
+    }
+
+    .main-content {
+        width: 92%;
+        margin-top: 20px;
+    }
+
+    .experiment-header {
+        padding: 28px 22px;
+    }
+
+    .experiment-header h1 {
+        font-size: 23px;
+    }
+
+    .detail-card {
+        padding: 22px;
+    }
+
+    .action-card {
+        align-items: flex-start;
+        flex-direction: column;
+        padding: 23px;
+    }
+
+    .action-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .action-card button {
+        padding: 12px 20px;
+        border: none;
+        border-radius: 7px;
+        background: #2563eb;
+        color: white;
+        font-size: 12px;
+        cursor: pointer;
+    }
+
+    .action-card button:hover {
+        background: #1d4ed8;
+    }
+
+    .action-card button:disabled {
+        background: #94a3b8;
+        cursor: not-allowed;
+    }
+
+    .lab-link {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 7px;
+        background: #15803d;
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+    }
+
+    .lab-link:hover {
+        background: #166534;
+    }
+
+    .lab-link[hidden] {
+        display: none;
+    }
+}

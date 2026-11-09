@@ -1,10 +1,13 @@
+
 package com.websecurity.platform.controller;
 
 import com.websecurity.platform.entity.SysUser;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class PageController {
@@ -29,23 +32,43 @@ public class PageController {
      */
     @GetMapping("/student")
     public String student(HttpServletRequest request) {
+        if (!isStudent(request)) {
+            return "redirect:/login";
+        }
+        return "student";
+    }
 
+    /**
+     * 学生实验详情页面
+     */
+    @GetMapping("/student/experiments/{id}")
+    public String experimentDetail(
+            @PathVariable Long id,
+            HttpServletRequest request,
+            Model model) {
+
+        if (!isStudent(request)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("experimentId", id);
+        return "experiment-detail";
+    }
+
+    /**
+     * 判断当前用户是否为已登录学生
+     */
+    private boolean isStudent(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
 
         if (session == null) {
-            return "redirect:/login";
+            return false;
         }
 
         SysUser user = (SysUser) session.getAttribute("loginUser");
 
-        if (user == null || user.getId() == null) {
-            return "redirect:/login";
-        }
-
-        if (!"STUDENT".equals(user.getRole())) {
-            return "redirect:/login";
-        }
-
-        return "student";
+        return user != null
+                && user.getId() != null
+                && "STUDENT".equals(user.getRole());
     }
 }

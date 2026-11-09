@@ -1,0 +1,136 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验详情 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/experiment-detail.css">
+</head>
+<body>
+
+<div class="page-container">
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">W</div>
+            <div>
+                <strong>Web安全平台</strong>
+                <span>Web Security Learning Platform</span>
+            </div>
+        </div>
+
+        <a href="/student" class="back-link">返回学生工作台</a>
+    </header>
+
+    <main class="main-content">
+
+        <div class="breadcrumb">
+            <a href="/student">学生工作台</a>
+            <span>/</span>
+            <span>实验资源</span>
+            <span>/</span>
+            <span>实验详情</span>
+        </div>
+
+        <section class="experiment-header">
+            <div class="header-content">
+                <span class="eyebrow">EXPERIMENT DETAILS</span>
+                <h1 id="experimentName">正在加载实验信息...</h1>
+                <p id="experimentDescription">请稍候...</p>
+
+                <div class="meta-list">
+                    <span id="experimentDifficulty">难度：--</span>
+                    <span id="experimentPlatform">实验平台：--</span>
+                    <span id="experimentId">实验编号：--</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="section-title">
+                <span class="title-number">01</span>
+                <div>
+                    <h2>实验目标</h2>
+                    <p>OBJECTIVES</p>
+                </div>
+            </div>
+            <div id="experimentTarget" class="detail-content">
+                暂无实验目标
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="section-title">
+                <span class="title-number">02</span>
+                <div>
+                    <h2>实验步骤</h2>
+                    <p>EXPERIMENT STEPS</p>
+                </div>
+            </div>
+            <div id="experimentSteps" class="detail-content steps-content">
+                暂无实验步骤
+            </div>
+        </section>
+
+        <section class="detail-card">
+            <div class="section-title">
+                <span class="title-number">03</span>
+                <div>
+                    <h2>实验说明</h2>
+                    <p>INSTRUCTIONS</p>
+                </div>
+            </div>
+            <div class="detail-content">
+                <p>
+                    请在开始实验前仔细阅读实验目标和实验步骤。
+                    实验靶场使用独立账号体系，请按照页面提供的实验入口进入靶场。
+                </p>
+                <p class="notice">
+                    安全提示：本平台集成的 WebGoat 是故意包含漏洞的教学环境，
+                    仅允许在本机或隔离网络中进行实验，不得用于攻击真实网站或系统。
+                </p>
+            </div>
+        </section>
+
+        <section class="action-card">
+            <div>
+                <h2>准备好开始实验了吗？</h2>
+                <p id="taskDescription">
+                    领取实验任务后，即可开始实验并进入对应的靶场环境。
+                </p>
+            </div>
+
+            <div class="action-buttons">
+                <button id="claimButton" type="button">
+                    正在检查任务状态...
+                </button>
+
+                <a id="labLink"
+                   class="lab-link"
+                   href="#"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   hidden>
+                    进入 WebGoat 实验环境
+                </a>
+            </div>
+        </section>
+
+        <div id="message" class="message"></div>
+
+    </main>
+
+    <footer class="footer">
+        基于 Java Web 的 Web 漏洞实验教学平台
+    </footer>
+
+</div>
+
+<script th:inline="javascript">
+    const experimentId = [[${experimentId}]];
+</script>
+<script src="/js/experiment-detail.js"></script>
+
+</body>
+</html>
