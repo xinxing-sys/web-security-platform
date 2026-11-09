@@ -304,3 +304,184 @@ body {
         display: none;
     }
 }
+
+/* =================================
+   实验操作区样式优化
+   电脑端和移动端通用
+================================= */
+
+.action-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    padding: 30px 34px;
+
+    background: #ffffff;
+    border: 1px solid #e5edf8;
+    border-radius: 16px;
+
+    box-shadow: 0 5px 20px rgba(15, 23, 42, 0.04);
+}
+
+/* 左侧文字区域 */
+.action-card > div:first-child {
+    flex: 1;
+    min-width: 220px;
+}
+
+.action-card h2 {
+    margin: 0 0 10px;
+    color: #172554;
+    font-size: 19px;
+    font-weight: 700;
+}
+
+.action-card p {
+    margin: 0;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.9;
+}
+
+/* 按钮区域 */
+.action-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 开始实验按钮 */
+.action-card button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 125px;
+    min-height: 46px;
+    padding: 0 24px;
+
+    color: #ffffff;
+    background: #2563eb;
+    border: 1px solid #2563eb;
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.18);
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* 按钮悬停 */
+.action-card button:not(:disabled):hover {
+    transform: translateY(-2px);
+    background: #1d4ed8;
+    border-color: #1d4ed8;
+    box-shadow: 0 7px 18px rgba(37, 99, 235, 0.24);
+}
+
+/* 按钮点击 */
+.action-card button:not(:disabled):active {
+    transform: translateY(0);
+}
+
+/* 按钮禁用状态 */
+.action-card button:disabled {
+    color: #64748b;
+    background: #e2e8f0;
+    border-color: #cbd5e1;
+    box-shadow: none;
+    cursor: not-allowed;
+}
+
+/* 按钮键盘聚焦 */
+.action-card button:focus-visible,
+.lab-link:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 3px;
+}
+
+/* WebGoat 入口 */
+.lab-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+    padding: 0 22px;
+
+    color: #ffffff;
+    background: #15803d;
+    border: 1px solid #15803d;
+    border-radius: 9px;
+
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.16);
+
+    transition:
+        background 0.2s ease,
+        box-shadow 0.2s ease,
+        transform 0.2s ease;
+}
+
+/* WebGoat 入口悬停 */
+.lab-link:hover {
+    transform: translateY(-2px);
+    color: #ffffff;
+    background: #166534;
+    border-color: #166534;
+    box-shadow: 0 7px 18px rgba(21, 128, 61, 0.22);
+}
+
+/* 确保隐藏状态生效 */
+.lab-link[hidden] {
+    display: none !important;
+}
+
+/* 移动端布局 */
+@media (max-width: 650px) {
+    .action-card {
+        align-items: stretch;
+        flex-direction: column;
+        padding: 23px;
+        gap: 20px;
+    }
+
+    .action-card > div:first-child {
+        min-width: 0;
+    }
+
+    .action-buttons {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+    .action-card button,
+    .lab-link {
+        min-height: 44px;
+    }
+}
+
+/* 减少动态效果 */
+@media (prefers-reduced-motion: reduce) {
+    .action-card button,
+    .lab-link {
+        transition: none;
+    }
+}

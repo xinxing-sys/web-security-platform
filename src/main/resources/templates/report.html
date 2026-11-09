@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验报告 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/report.css">
+</head>
+<body>
+
+<div class="page-container">
+
+    <header>
+        <h1>Web安全平台</h1>
+        <a href="/student">返回学生工作台</a>
+    </header>
+
+    <main>
+        <h2>实验报告提交</h2>
+        <p>请认真填写实验报告，完成后提交给教师审核。</p>
+
+        <section>
+            <h3>实验信息</h3>
+            <p>任务编号：<span id="taskIdText" th:text="${taskId}"></span></p>
+            <p id="experimentName">正在加载实验信息...</p>
+            <p id="taskStatus">正在加载任务状态...</p>
+        </section>
+
+        <section>
+            <h3>实验报告</h3>
+
+            <div id="reportForm">
+                <div class="form-group">
+                    <label for="reportContent">实验报告内容</label>
+                    <textarea
+                            id="reportContent"
+                            rows="12"
+                            placeholder="请填写实验目的、实验环境、实验步骤、实验结果、问题分析和实验总结……"
+                    ></textarea>
+                </div>
+
+                <div id="submitMessage" class="submit-message"></div>
+
+                <button type="button" id="submitReportButton">
+                    提交实验报告
+                </button>
+            </div>
+
+            <p id="reportFormTip" class="form-tip"></p>
+        </section>
+
+        <section>
+            <h3>历史提交记录</h3>
+            <div id="submissionHistory">
+                <p>正在加载历史提交记录...</p>
+            </div>
+        </section>
+    </main>
+
+</div>
+
+<script th:inline="javascript">
+    const taskId = [[${taskId}]];
+</script>
+
+<script>
+    window.taskId = /*[[${taskId}]]*/ 0;
+</script>
+<script src="/js/report.js"></script>
+
+</body>
+</html>

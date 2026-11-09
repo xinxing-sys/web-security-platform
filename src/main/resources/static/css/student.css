@@ -455,4 +455,175 @@ td {
         font-size: 12px;
         font-weight: 600;
     }
+
+
+
+
+}
+
+
+/* ================================
+   实验资源卡片优化
+   适用于电脑端和移动端
+================================ */
+
+/* 实验卡片基础样式 */
+.resource-link {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-height: 190px;
+    padding: 24px;
+    overflow: hidden;
+
+    color: inherit;
+    text-decoration: none;
+
+    background: #ffffff;
+    border: 1px solid #e8edf5;
+    border-radius: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        border-color 0.25s ease,
+        background-color 0.25s ease;
+}
+
+/* 卡片左侧装饰线 */
+.resource-link::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 0;
+    background: #2563eb;
+    border-radius: 0 0 4px 4px;
+
+    transition: height 0.25s ease;
+}
+
+/* 鼠标悬停 */
+.resource-link:hover {
+    transform: translateY(-5px);
+    border-color: #bfdbfe;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.10);
+    background: #ffffff;
+}
+
+.resource-link:hover::before {
+    height: 100%;
+}
+
+/* 键盘聚焦 */
+.resource-link:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 3px;
+    border-color: #2563eb;
+}
+
+/* 实验名称 */
+.resource-link h3 {
+    margin: 0;
+    padding-right: 8px;
+    color: #172554;
+    font-size: 17px;
+    font-weight: 700;
+    line-height: 1.6;
+
+    transition: color 0.2s ease;
+}
+
+.resource-link:hover h3 {
+    color: #2563eb;
+}
+
+/* 实验介绍 */
+.resource-link p {
+    margin-top: 12px;
+    color: #64748b;
+    font-size: 13px;
+    line-height: 1.9;
+
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+}
+
+/* 实验信息 */
+.resource-link .resource-meta {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 18px;
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+/* 难度标签 */
+.resource-link .difficulty {
+    padding: 5px 10px;
+    color: #2563eb;
+    background: #eff6ff;
+    border: 1px solid #dbeafe;
+    border-radius: 6px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* 查看详情入口 */
+.resource-enter {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 5px;
+
+    margin-top: auto;
+    padding-top: 18px;
+
+    color: #2563eb;
+    font-size: 12px;
+    font-weight: 600;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.resource-link:hover .resource-enter {
+    color: #1d4ed8;
+    transform: translateX(4px);
+}
+
+/* 点击反馈 */
+.resource-link:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.08);
+}
+
+/* 移动端适配 */
+@media (max-width: 650px) {
+    .resource-link {
+        min-height: 175px;
+        padding: 20px;
+    }
+
+    .resource-link:hover {
+        transform: translateY(-2px);
+    }
+}
+
+/* 尊重用户减少动态效果的系统设置 */
+@media (prefers-reduced-motion: reduce) {
+    .resource-link,
+    .resource-link::before,
+    .resource-link h3,
+    .resource-enter {
+        transition: none;
+    }
 }

@@ -55,6 +55,25 @@ public class PageController {
         return "experiment-detail";
     }
 
+
+    /**
+     * 学生实验报告页面
+     */
+    @GetMapping("/student/tasks/{taskId}/report")
+    public String experimentReport(
+            @PathVariable Long taskId,
+            HttpServletRequest request,
+            Model model) {
+
+        if (!isStudent(request)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("taskId", taskId);
+        return "report";
+    }
+
+
     /**
      * 判断当前用户是否为已登录学生
      */
