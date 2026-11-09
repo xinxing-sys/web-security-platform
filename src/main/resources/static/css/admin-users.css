@@ -1,4 +1,4 @@
-
+@import url("./design-tokens.css");
 * {
     box-sizing: border-box;
 }
@@ -584,3 +584,165 @@ tbody tr:hover {
         flex-direction: column;
     }
 }
+
+
+/* ===== 管理员用户管理统一优化 ===== */
+
+body {
+    background: var(--color-page-bg);
+    color: var(--color-text-primary);
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+
+.topbar {
+    border-bottom-color: var(--color-border);
+}
+
+.brand-icon {
+    border-radius: var(--radius-md);
+}
+
+.welcome {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card,
+.panel {
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.stat-card {
+    transition: var(--transition-normal);
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.filter-grid {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+.form-item input,
+.form-item select,
+.table-toolbar select {
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.form-item input:focus,
+.form-item select:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+.btn {
+    border-radius: var(--radius-sm);
+    transition: var(--transition-normal);
+}
+
+.btn-primary {
+    background: var(--color-primary);
+}
+
+.btn-primary:hover {
+    background: var(--color-primary-hover);
+}
+
+.table-wrapper {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+}
+
+thead {
+    background: #f8fafc;
+}
+
+th, td {
+    padding: 15px 13px;
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.role-tag,
+.status-tag {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.action-button {
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.modal {
+    border-radius: var(--radius-lg);
+}
+
+.modal-mask {
+    backdrop-filter: blur(3px);
+}
+
+.detail-item {
+    border-radius: var(--radius-sm);
+}
+
+.toast {
+    border-radius: var(--radius-md);
+}
+
+@media (max-width: 650px) {
+    .page-container {
+        width: 94%;
+    }
+
+    .welcome {
+        padding: 22px;
+    }
+
+    .stats-grid {
+        gap: 10px;
+    }
+
+    .panel {
+        padding: 16px;
+    }
+
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .filter-actions .btn {
+        width: 100%;
+    }
+
+    .table-toolbar {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .pagination {
+        flex-wrap: wrap;
+    }
+
+    .detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .permission-box {
+        align-items: stretch;
+        flex-direction: column;
+    }
+}
+

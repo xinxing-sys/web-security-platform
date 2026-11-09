@@ -1,4 +1,4 @@
-
+@import url("./design-tokens.css");
 /* =====================================
    Web安全平台 - 实验报告页面
 ===================================== */
@@ -358,5 +358,174 @@ main section p {
 
     .attachment-upload-button {
         width: 100%;
+    }
+}
+
+
+/* =========================================
+   实验报告 - 统一视觉优化
+========================================= */
+
+body {
+    background: var(--color-page-bg);
+    color: var(--color-text-primary);
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+
+header {
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+header h1 {
+    color: #172554;
+}
+
+main > h2 {
+    color: #172554;
+}
+
+main section {
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+main section h3 {
+    border-left-color: var(--color-primary);
+}
+
+.form-group textarea {
+    border-color: #dbe3ef;
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.form-group textarea:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+
+#submitReportButton,
+.attachment-upload-button {
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-weight: 600;
+    transition: var(--transition-normal);
+}
+
+#submitReportButton:hover:not(:disabled),
+.attachment-upload-button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+#submitReportButton:focus-visible,
+.attachment-upload-button:focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.2);
+    outline-offset: 2px;
+}
+
+.history-item {
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.history-header {
+    flex-wrap: wrap;
+}
+
+.history-status {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* 审核状态 */
+.history-status:has(+ *) {
+    line-height: 1.5;
+}
+
+.history-content {
+    border: 1px solid var(--color-border-light);
+    border-radius: var(--radius-md);
+    line-height: 1.9;
+}
+
+.history-attachment {
+    border-top-color: var(--color-border);
+}
+
+.attachment-input {
+    border-radius: var(--radius-sm);
+    max-width: 100%;
+}
+
+.attachment-download {
+    border-radius: var(--radius-sm);
+    transition: var(--transition-fast);
+}
+
+.attachment-download:hover {
+    text-decoration: none;
+    background: #dcfce7;
+}
+
+.empty-history {
+    border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-md);
+    line-height: 1.8;
+}
+
+.submit-message {
+    line-height: 1.7;
+}
+
+@media (max-width: 650px) {
+    header {
+        padding: 0 5%;
+    }
+
+    header h1 {
+        font-size: 16px;
+    }
+
+    header a {
+        font-size: 12px;
+    }
+
+    main {
+        width: 92%;
+        margin-top: 24px;
+    }
+
+    main section {
+        padding: 20px 17px;
+        border-radius: var(--radius-md);
+    }
+
+    .form-group textarea {
+        min-height: 210px;
+        font-size: 13px;
+    }
+
+    #submitReportButton {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .history-item {
+        padding: 16px;
+    }
+
+    .history-header {
+        align-items: flex-start;
+    }
+
+    .history-attachment {
+        gap: 10px;
+    }
+
+    .attachment-download {
+        width: fit-content;
     }
 }

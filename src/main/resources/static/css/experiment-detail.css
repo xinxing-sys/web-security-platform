@@ -1,4 +1,4 @@
-
+@import url("./design-tokens.css");
 * {
     margin: 0;
     padding: 0;
@@ -485,3 +485,142 @@ body {
         transition: none;
     }
 }
+
+
+/* =========================================
+   实验详情 - 统一视觉优化
+========================================= */
+
+body {
+    background: var(--color-page-bg);
+    color: var(--color-text-primary);
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+
+.topbar {
+    border-bottom-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.back-link {
+    font-weight: 600;
+    transition: var(--transition-fast);
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.experiment-header {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.experiment-header h1 {
+    line-height: 1.5;
+}
+
+.meta-list span {
+    border-radius: var(--radius-md);
+}
+
+.detail-card {
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+.detail-card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+.section-title {
+    border-bottom-color: var(--color-border-light);
+}
+
+.title-number {
+    min-width: 42px;
+}
+
+.detail-content {
+    color: var(--color-text-secondary);
+    overflow-wrap: anywhere;
+}
+
+.notice {
+    border-radius: var(--radius-md);
+    line-height: 1.9;
+}
+
+.action-card {
+    border-color: var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+.action-card button {
+    font-family: inherit;
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.action-card button:not(:disabled):hover {
+    transform: translateY(-2px);
+}
+
+.lab-link {
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.message {
+    min-height: 22px;
+    line-height: 1.7;
+}
+
+@media (max-width: 650px) {
+    .topbar {
+        height: 65px;
+    }
+
+    .brand strong {
+        font-size: 14px;
+    }
+
+    .brand span {
+        font-size: 9px;
+    }
+
+    .back-link {
+        font-size: 12px;
+    }
+
+    .breadcrumb {
+        flex-wrap: wrap;
+        line-height: 1.8;
+    }
+
+    .experiment-header {
+        border-radius: var(--radius-lg);
+    }
+
+    .detail-card {
+        border-radius: var(--radius-md);
+    }
+
+    .action-card {
+        border-radius: var(--radius-md);
+    }
+
+    .action-buttons {
+        width: 100%;
+    }
+
+    .action-buttons button,
+    .action-buttons .lab-link {
+        flex: 1;
+        text-align: center;
+    }
+}
+

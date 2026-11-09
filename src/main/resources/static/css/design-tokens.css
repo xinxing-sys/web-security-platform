@@ -1,0 +1,101 @@
+
+/* =========================================
+   Web 漏洞实验教学平台 - 全局设计规范
+   统一颜色、字体、边框、阴影及交互效果
+========================================= */
+
+:root {
+    /* 品牌主色 */
+    --color-primary: #2563eb;
+    --color-primary-hover: #1d4ed8;
+    --color-primary-light: #eff6ff;
+
+    /* 辅助颜色 */
+    --color-success: #16a34a;
+    --color-warning: #d97706;
+    --color-danger: #dc2626;
+    --color-info: #0284c7;
+
+    /* 页面颜色 */
+    --color-page-bg: #f5f7fb;
+    --color-card-bg: #ffffff;
+    --color-input-bg: #ffffff;
+
+    /* 文字颜色 */
+    --color-text-primary: #1e293b;
+    --color-text-secondary: #64748b;
+    --color-text-muted: #94a3b8;
+
+    /* 边框 */
+    --color-border: #e2e8f0;
+    --color-border-light: #edf0f5;
+
+    /* 圆角 */
+    --radius-sm: 6px;
+    --radius-md: 10px;
+    --radius-lg: 14px;
+    --radius-xl: 18px;
+
+    /* 阴影 */
+    --shadow-sm: 0 2px 8px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 5px 20px rgba(15, 23, 42, 0.06);
+    --shadow-lg: 0 12px 30px rgba(15, 23, 42, 0.10);
+
+    /* 动画 */
+    --transition-fast: 0.15s ease;
+    --transition-normal: 0.25s ease;
+}
+
+/* 统一字体继承 */
+:where(button, input, select, textarea) {
+    font: inherit;
+}
+
+/* 统一键盘焦点提示 */
+:where(a, button, input, select, textarea):focus-visible {
+    outline: 3px solid rgba(37, 99, 235, 0.25);
+    outline-offset: 2px;
+}
+
+/* 统一文本选中效果 */
+::selection {
+    color: #ffffff;
+    background: #2563eb;
+}
+
+/* 图片不超出容器 */
+img {
+    max-width: 100%;
+}
+
+/* 统一滚动条 */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 transparent;
+}
+
+*::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+*::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 10px;
+}
+
+*::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* 尊重系统减少动态效果的设置 */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        scroll-behavior: auto !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}

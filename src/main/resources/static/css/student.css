@@ -1,3 +1,5 @@
+@import url("./design-tokens.css");
+
 * {
     margin: 0;
     padding: 0;
@@ -625,5 +627,203 @@ td {
     .resource-link h3,
     .resource-enter {
         transition: none;
+    }
+}
+
+
+/* =========================================
+   学生工作台 - 统一视觉优化
+========================================= */
+
+body {
+    background: var(--color-page-bg);
+    color: var(--color-text-primary);
+    font-family: "Microsoft YaHei", "PingFang SC", Arial, sans-serif;
+}
+
+.sidebar {
+    border-right-color: var(--color-border);
+    box-shadow: var(--shadow-sm);
+}
+
+.brand-icon {
+    border-radius: var(--radius-md);
+}
+
+.nav-item {
+    border-radius: var(--radius-md);
+    transition: var(--transition-normal);
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background: var(--color-primary-light);
+    color: var(--color-primary);
+}
+
+.main-content {
+    max-width: 1600px;
+}
+
+.welcome-section {
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-md);
+}
+
+.stat-card,
+.resource-card,
+.knowledge-card {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    transition: var(--transition-normal);
+}
+
+.stat-card:hover,
+.knowledge-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-md);
+}
+
+.resource-link {
+    border-radius: var(--radius-lg);
+    border-color: var(--color-border);
+}
+
+.resource-link:hover {
+    border-color: #bfdbfe;
+}
+
+.resource-link h3,
+.knowledge-card h3 {
+    color: var(--color-text-primary);
+}
+
+.resource-link p,
+.knowledge-card p {
+    color: var(--color-text-secondary);
+}
+
+.difficulty {
+    border-radius: var(--radius-sm);
+}
+
+.table-container {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+}
+
+table {
+    min-width: 600px;
+}
+
+th {
+    background: #f8fafc;
+    color: var(--color-text-secondary);
+}
+
+th, td {
+    padding: 16px 20px;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background: #f8fbff;
+}
+
+.status {
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.status.CLAIMED {
+    color: #1d4ed8;
+    background: #eff6ff;
+}
+
+.status.IN_PROGRESS {
+    color: #0369a1;
+    background: #e0f2fe;
+}
+
+.status.SUBMITTED {
+    color: #a16207;
+    background: #fefce8;
+}
+
+.status.COMPLETED,
+.status.APPROVED {
+    color: #15803d;
+    background: #f0fdf4;
+}
+
+.status.REJECTED {
+    color: #b91c1c;
+    background: #fef2f2;
+}
+
+.empty,
+.loading {
+    color: var(--color-text-muted);
+}
+
+button,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+@media (max-width: 650px) {
+    .sidebar {
+        padding: 18px 15px;
+    }
+
+    .sidebar-brand {
+        padding-bottom: 20px;
+    }
+
+    .main-content {
+        padding: 20px 15px;
+    }
+
+    .topbar {
+        gap: 12px;
+    }
+
+    .topbar h1 {
+        font-size: 20px;
+    }
+
+    .welcome-section {
+        min-height: 160px;
+        padding: 25px 22px;
+    }
+
+    .welcome-section h2 {
+        font-size: 23px;
+    }
+
+    .statistics {
+        gap: 12px;
+    }
+
+    .stat-card {
+        padding: 18px;
+    }
+
+    .section-heading {
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .section-tag {
+        display: none;
+    }
+
+    th, td {
+        padding: 13px 15px;
+        white-space: nowrap;
     }
 }
