@@ -278,3 +278,85 @@ main section p {
     color: #94a3b8;
     font-size: 13px;
 }
+
+/* ==============================
+   实验报告附件上传区域
+   ============================== */
+
+.history-attachment {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid #e8edf3;
+}
+
+.attachment-input {
+    max-width: 280px;
+    padding: 8px;
+    font-size: 13px;
+    color: #475569;
+    background: #f8fafc;
+    border: 1px solid #dbe3ed;
+    border-radius: 6px;
+}
+
+.attachment-upload-button {
+    padding: 9px 18px;
+    color: #ffffff;
+    font-size: 13px;
+    background: #2563eb;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.attachment-upload-button:hover {
+    background: #1d4ed8;
+}
+
+.attachment-upload-button:disabled {
+    background: #94a3b8;
+    cursor: not-allowed;
+}
+
+.attachment-download {
+    display: inline-block;
+    padding: 8px 14px;
+    color: #15803d;
+    font-size: 13px;
+    text-decoration: none;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 6px;
+    transition: background 0.2s ease;
+}
+
+.attachment-download:hover {
+    background: #dcfce7;
+}
+
+.no-attachment {
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+@media (max-width: 600px) {
+    .history-attachment {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .attachment-input {
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .attachment-upload-button {
+        width: 100%;
+    }
+}

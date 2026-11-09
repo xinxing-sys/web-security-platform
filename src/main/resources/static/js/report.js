@@ -148,6 +148,12 @@ function getReviewStatusText(status) {
 /**
  * 渲染历史报告
  */
+/**
+ * 渲染历史报告
+ */
+/**
+ * 渲染历史报告
+ */
 function renderSubmissionHistory(submissions) {
     const container = document.getElementById("submissionHistory");
 
@@ -159,6 +165,78 @@ function renderSubmissionHistory(submissions) {
         `;
         return;
     }
+
+    container.innerHTML = submissions.map((item, index) => {
+        const statusText = getReviewStatusText(item.reviewStatus);
+
+        const scoreText =
+            item.score === null || item.score === undefined
+                ? "暂未评分"
+                : `${escapeHtml(item.score)} 分`;
+
+        const attachmentHtml = item.attachmentPath
+            ? `<a class="attachment-download"
+                  href="/api/submissions/${encodeURIComponent(item.id)}/attachment">
+                  下载报告附件
+               </a>`
+            : `<span class="no-attachment">未上传附件</span>`;
+
+        const uploadHtml = item.reviewStatus === "PENDING"
+            ? `
+                <div class="attachment-upload-area">
+                    <input
+                        type="file"
+                        class="attachment-input"
+                        data-submission-id="${escapeHtml(item.id)}"
+                        accept=".pdf,.png,.jpg,.jpeg,.docx,.txt"
+                    >
+                    <button
+                        type="button"
+                        class="attachment-upload-button"
+                        data-submission-id="${escapeHtml(item.id)}"
+                    >
+                        上传附件
+                    </button>
+                </div>
+            `
+            : "";
+
+        return `
+            <article class="history-item">
+                <div class="history-header">
+                    <strong>第 ${index + 1} 次提交</strong>
+                    <span class="history-status">${escapeHtml(statusText)}</span>
+                </div>
+
+                <p>
+                    <strong>提交时间：</strong>
+                    ${formatDate(item.submittedAt)}
+                </p>
+
+                <p>
+                    <strong>成绩：</strong>
+                    ${scoreText}
+                </p>
+
+                <p><strong>报告内容：</strong></p>
+
+                <div class="history-content">
+                    ${escapeHtml(item.content || "暂无报告内容")}
+                </div>
+
+                <p>
+                    <strong>教师评语：</strong>
+                    ${escapeHtml(item.reviewComment || "暂无评语")}
+                </p>
+
+                <div class="history-attachment">
+                    ${attachmentHtml}
+                    ${uploadHtml}
+                </div>
+            </article>
+        `;
+    }).join("");
+}
 
     container.innerHTML = submissions.map((item, index) => {
         const statusText = getReviewStatusText(item.reviewStatus);
@@ -220,6 +298,67 @@ async function loadSubmissionHistory() {
     );
 
     renderSubmissionHistory(submissions);
+}
+
+
+/**
+ * 上传实验报告附件
+ */
+async function uploadSubmissionAttachment(submissionId, file, button) {
+
+    if (!file) {
+        alert("请先选择需要上传的附件。");
+        return;
+    }
+
+    const allowedExtensions = [
+        "pdf", "png", "jpg", "jpeg", "docx", "txt"
+    ];
+
+    const extension = file.name.split(".").pop().toLowerCase();
+
+    if (!allowedExtensions.includes(extension)) {
+        alert("文件格式不正确，仅支持 PDF、PNG、JPG、JPEG、DOCX、TXT。");
+        return;
+    }
+
+    if (file.size > 10 * 1024 * 1024) {
+        alert("附件大小不能超过 10 MB。");
+        return;
+    }
+
+    const formData = new FormData();
+
+    // 后端要求文件字段名称为 file
+    formData.append("file", file);
+
+    const originalText = button.textContent;
+
+    button.disabled = true;
+    button.textContent = "正在上传...";
+
+    try {
+        await apiRequest(
+            `/api/submissions/${submissionId}/attachment`,
+            {
+                method: "POST",
+                body: formData
+            }
+        );
+
+        alert("附件上传成功！");
+
+        // 重新加载历史报告，更新附件下载入口
+        await loadSubmissionHistory();
+
+    } catch (error) {
+        console.error("附件上传失败：", error);
+        alert(error.message || "附件上传失败，请稍后重试。");
+
+    } finally {
+        button.disabled = false;
+        button.textContent = originalText;
+    }
 }
 
 /**
@@ -311,7 +450,33 @@ async function initReportPage() {
 
     document.getElementById("submitReportButton")
         .addEventListener("click", submitReport);
+// 使用事件委托处理历史报告中的附件上传按钮
+document.getElementById("submissionHistory")
+    .addEventListener("click", async function(event) {
 
+        const button = event.target.closest(".attachment-upload-button");
+
+        if (!button) {
+            return;
+        }
+
+        const submissionId = button.dataset.submissionId;
+
+        const fileInput = document.querySelector(
+            `.attachment-input[data-submission-id="${submissionId}"]`
+        );
+
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            alert("请先选择需要上传的附件。");
+            return;
+        }
+
+        await uploadSubmissionAttachment(
+            submissionId,
+            fileInput.files[0],
+            button
+        );
+    });
     try {
         await loadTaskAndExperiment();
         await loadSubmissionHistory();
