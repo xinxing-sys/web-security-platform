@@ -264,7 +264,7 @@ async function submitReport() {
     button.textContent = "正在提交...";
 
     try {
-        await apiRequest(`/api/tasks/${taskId}/submit`, {
+        await apiRequest(`/api/tasks/${reportTaskId}/submit`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -299,7 +299,7 @@ async function submitReport() {
  * 页面初始化
  */
 async function initReportPage() {
-    if (!taskId || !Number.isInteger(Number(taskId)) || Number(taskId) <= 0) {
+    if (!reportTaskId || !Number.isInteger(Number(reportTaskId)) || Number(reportTaskId) <= 0) {
         document.getElementById("experimentName").textContent =
             "任务编号无效";
 
