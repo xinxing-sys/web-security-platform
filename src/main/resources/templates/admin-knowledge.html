@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>漏洞知识与分类管理</title>
+    <link rel="stylesheet" th:href="@{/css/admin-knowledge.css}">
+</head>
+<body>
+<div class="page">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <h1>漏洞知识与分类管理</h1>
+                <p>Web Security Learning Platform</p>
+            </div>
+        </div>
+        <a href="/admin" class="back-link">返回管理员工作台</a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <div>
+                <div class="eyebrow">ADMINISTRATION</div>
+                <h2>漏洞知识中心</h2>
+                <p>维护漏洞知识内容与平台漏洞分类。</p>
+            </div>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <span>漏洞知识总数</span>
+                <strong id="vulnerabilityTotal">--</strong>
+            </div>
+            <div class="stat-card">
+                <span>已启用漏洞</span>
+                <strong id="vulnerabilityEnabled">--</strong>
+            </div>
+            <div class="stat-card">
+                <span>分类总数</span>
+                <strong id="categoryTotal">--</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="tabs">
+                <button class="tab active" data-tab="vulnerabilities">漏洞知识管理</button>
+                <button class="tab" data-tab="categories">漏洞分类管理</button>
+            </div>
+
+            <!-- 漏洞知识管理 -->
+            <section id="vulnerabilitiesPanel" class="tab-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h3>漏洞知识列表</h3>
+                        <p>管理漏洞标题、原理、危害和防护建议</p>
+                    </div>
+                    <button class="primary-btn" id="addVulnerabilityBtn">＋ 新增漏洞知识</button>
+                </div>
+
+                <div class="filters">
+                    <input id="vulnerabilityKeyword" placeholder="搜索漏洞标题">
+                    <select id="vulnerabilityCategoryFilter">
+                        <option value="">全部分类</option>
+                    </select>
+                    <select id="vulnerabilityStatusFilter">
+                        <option value="">全部状态</option>
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                    <button class="primary-btn" id="searchVulnerabilityBtn">查询</button>
+                    <button class="light-btn" id="resetVulnerabilityBtn">重置</button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>漏洞标题</th>
+                            <th>所属分类</th>
+                            <th>简介</th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="vulnerabilityTable">
+                        <tr><td colspan="7" class="empty">正在加载...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="pagination">
+                    <span id="vulnerabilityPageInfo">共 0 条记录</span>
+                    <div class="page-controls">
+                        <select id="vulnerabilityPageSize">
+                            <option value="10">10条/页</option>
+                            <option value="20">20条/页</option>
+                            <option value="50">50条/页</option>
+                        </select>
+                        <button class="light-btn" id="vulnerabilityPrev">上一页</button>
+                        <span id="vulnerabilityPageText">1 / 1</span>
+                        <button class="light-btn" id="vulnerabilityNext">下一页</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 分类管理 -->
+            <section id="categoriesPanel" class="tab-panel hidden">
+                <div class="panel-heading">
+                    <div>
+                        <h3>漏洞分类列表</h3>
+                        <p>管理分类名称、类型、排序和启用状态</p>
+                    </div>
+                    <button class="primary-btn" id="addCategoryBtn">＋ 新增分类</button>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>分类名称</th>
+                            <th>分类类型</th>
+                            <th>分类描述</th>
+                            <th>排序</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="categoryTable">
+                        <tr><td colspan="7" class="empty">正在加载...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+
+<!-- 漏洞知识弹窗 -->
+<div class="modal-mask" id="vulnerabilityModal">
+    <div class="modal wide">
+        <div class="modal-header">
+            <div>
+                <h3 id="vulnerabilityModalTitle">新增漏洞知识</h3>
+                <p>填写漏洞知识内容</p>
+            </div>
+            <button class="close-btn" data-close="vulnerabilityModal">×</button>
+        </div>
+
+        <form id="vulnerabilityForm">
+            <input type="hidden" id="vulnerabilityId">
+
+            <div class="form-grid">
+                <div class="form-item">
+                    <label for="vulnerabilityTitle">漏洞标题 *</label>
+                    <input id="vulnerabilityTitle" maxlength="200" required
+                           placeholder="例如：SQL 注入漏洞">
+                </div>
+
+                <div class="form-item">
+                    <label for="vulnerabilityCategoryId">所属分类 *</label>
+                    <select id="vulnerabilityCategoryId" required>
+                        <option value="">请选择分类</option>
+                    </select>
+                </div>
+
+                <div class="form-item full">
+                    <label for="vulnerabilitySummary">漏洞简介</label>
+                    <textarea id="vulnerabilitySummary" rows="2"
+                              placeholder="简要介绍漏洞"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="vulnerabilityPrinciple">漏洞原理</label>
+                    <textarea id="vulnerabilityPrinciple" rows="3"
+                              placeholder="说明漏洞产生的技术原理"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="vulnerabilityHarm">漏洞危害</label>
+                    <textarea id="vulnerabilityHarm" rows="3"
+                              placeholder="说明漏洞可能造成的影响"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="vulnerabilityProtection">防护建议</label>
+                    <textarea id="vulnerabilityProtection" rows="3"
+                              placeholder="填写修复和防护建议"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="vulnerabilityContent">详细内容</label>
+                    <textarea id="vulnerabilityContent" rows="5"
+                              placeholder="可填写详细知识内容"></textarea>
+                </div>
+
+                <div class="form-item">
+                    <label for="vulnerabilityStatus">状态</label>
+                    <select id="vulnerabilityStatus">
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="light-btn" data-close="vulnerabilityModal">取消</button>
+                <button type="submit" class="primary-btn" id="saveVulnerabilityBtn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- 分类弹窗 -->
+<div class="modal-mask" id="categoryModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h3 id="categoryModalTitle">新增分类</h3>
+                <p>填写分类基本信息</p>
+            </div>
+            <button class="close-btn" data-close="categoryModal">×</button>
+        </div>
+
+        <form id="categoryForm">
+            <input type="hidden" id="categoryId">
+
+            <div class="form-grid">
+                <div class="form-item full">
+                    <label for="categoryName">分类名称 *</label>
+                    <input id="categoryName" required maxlength="100"
+                           placeholder="请输入分类名称">
+                </div>
+
+                <div class="form-item full">
+                    <label for="categoryType">分类类型</label>
+                    <input id="categoryType" maxlength="50"
+                           placeholder="请输入分类类型，按项目已有数据填写">
+                </div>
+
+                <div class="form-item full">
+                    <label for="categoryDescription">分类描述</label>
+                    <textarea id="categoryDescription" rows="3"
+                              placeholder="请输入分类描述"></textarea>
+                </div>
+
+                <div class="form-item">
+                    <label for="categorySortOrder">排序</label>
+                    <input id="categorySortOrder" type="number" value="0">
+                </div>
+
+                <div class="form-item">
+                    <label for="categoryStatus">状态</label>
+                    <select id="categoryStatus">
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="light-btn" data-close="categoryModal">取消</button>
+                <button type="submit" class="primary-btn" id="saveCategoryBtn">保存</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script th:src="@{/js/admin-knowledge.js}"></script>
+</body>
+</html>

@@ -50,6 +50,28 @@ public class PageController {
     }
 
     /**
+     * 管理员实验报告审核页面
+     */
+    @GetMapping("/admin/submissions")
+    public String adminSubmissions(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin-submissions";
+    }
+
+    /**
+     * 管理员用户管理页面
+     */
+    @GetMapping("/admin/users")
+    public String adminUsers(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin-users";
+    }
+
+    /**
      * 学生实验详情页面
      */
     @GetMapping("/student/experiments/{id}")
@@ -64,6 +86,29 @@ public class PageController {
 
         model.addAttribute("experimentId", id);
         return "experiment-detail";
+    }
+
+
+    /**
+     * 管理员实验资源管理页面
+     */
+    @GetMapping("/admin/experiments")
+    public String adminExperiments(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin-experiments";
+    }
+
+    /**
+     * 管理员漏洞知识与分类管理页面
+     */
+    @GetMapping("/admin/knowledge")
+    public String adminKnowledge(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin-knowledge";
     }
 
     /**

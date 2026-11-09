@@ -1,0 +1,205 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验报告审核 - Web安全实验教学平台</title>
+    <link rel="stylesheet" href="/css/admin-submissions.css">
+</head>
+<body>
+<div class="page-container">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <h1>Web 安全实验教学平台</h1>
+                <p>ADMINISTRATION CONSOLE</p>
+            </div>
+        </div>
+        <div class="topbar-right">
+            <span class="admin-label">管理员</span>
+            <a href="/admin" class="back-link">返回管理工作台</a>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <section class="page-heading">
+            <div>
+                <p class="eyebrow">REPORT MANAGEMENT</p>
+                <h2>实验报告审核</h2>
+                <p class="page-description">查看学生提交的实验报告，完成评分与审核。</p>
+            </div>
+            <button type="button" class="btn btn-primary" id="refreshBtn">
+                刷新列表
+            </button>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-title">全部报告</span>
+                <strong id="totalCount">0</strong>
+                <span class="stat-note">所有提交记录</span>
+            </div>
+            <div class="stat-card pending-card">
+                <span class="stat-title">待审核</span>
+                <strong id="pendingCount">0</strong>
+                <span class="stat-note">等待教师审核</span>
+            </div>
+            <div class="stat-card approved-card">
+                <span class="stat-title">已通过</span>
+                <strong id="approvedCount">0</strong>
+                <span class="stat-note">审核通过的报告</span>
+            </div>
+            <div class="stat-card rejected-card">
+                <span class="stat-title">已驳回</span>
+                <strong id="rejectedCount">0</strong>
+                <span class="stat-note">需要重新提交的报告</span>
+            </div>
+        </section>
+
+        <section class="content-card">
+            <div class="section-header">
+                <div>
+                    <h3>报告列表</h3>
+                    <p>选择一份报告查看详情并进行审核</p>
+                </div>
+                <div class="filter-area">
+                    <label for="statusFilter">审核状态</label>
+                    <select id="statusFilter">
+                        <option value="">全部报告</option>
+                        <option value="PENDING">待审核</option>
+                        <option value="APPROVED">已通过</option>
+                        <option value="REJECTED">已驳回</option>
+                    </select>
+                </div>
+            </div>
+
+            <div id="loading" class="state-message">正在加载报告数据...</div>
+            <div id="errorMessage" class="error-message hidden"></div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>报告编号</th>
+                        <th>学生 ID</th>
+                        <th>任务 ID</th>
+                        <th>提交时间</th>
+                        <th>审核状态</th>
+                        <th>成绩</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="submissionTableBody">
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="emptyState" class="state-message hidden">
+                暂无符合条件的实验报告
+            </div>
+        </section>
+    </main>
+</div>
+
+<!-- 报告详情弹窗 -->
+<div class="modal-overlay hidden" id="detailModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <p class="eyebrow">SUBMISSION DETAILS</p>
+                <h3>实验报告详情</h3>
+            </div>
+            <button type="button" class="close-btn" id="closeModalBtn">×</button>
+        </div>
+
+        <div id="detailLoading" class="state-message hidden">正在加载报告详情...</div>
+
+        <div id="detailContent">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <span>报告编号</span>
+                    <strong id="detailId">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>学生 ID</span>
+                    <strong id="detailUserId">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>任务 ID</span>
+                    <strong id="detailTaskId">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>提交时间</span>
+                    <strong id="detailSubmittedAt">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>审核状态</span>
+                    <strong id="detailStatus">-</strong>
+                </div>
+                <div class="detail-item">
+                    <span>当前成绩</span>
+                    <strong id="detailScore">未评分</strong>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>报告正文</h4>
+                <div class="report-content" id="detailReportContent">暂无报告内容</div>
+            </div>
+
+            <div class="detail-section">
+                <h4>报告附件</h4>
+                <div class="attachment-area">
+                    <span id="attachmentName">未上传附件</span>
+                    <button type="button" class="btn btn-secondary hidden"
+                            id="downloadAttachmentBtn">
+                        下载附件
+                    </button>
+                </div>
+            </div>
+
+            <div class="detail-section">
+                <h4>审核信息</h4>
+                <div class="review-info">
+                    <p>审核人 ID：<span id="detailReviewerId">-</span></p>
+                    <p>审核时间：<span id="detailReviewedAt">-</span></p>
+                    <p>教师评语：<span id="detailReviewComment">暂无评语</span></p>
+                </div>
+            </div>
+
+            <div class="review-form" id="reviewForm">
+                <h4>提交审核</h4>
+
+                <div class="form-group">
+                    <label for="scoreInput">实验成绩（0–100 分）</label>
+                    <input type="number" id="scoreInput"
+                           min="0" max="100" step="0.01"
+                           placeholder="请输入成绩">
+                </div>
+
+                <div class="form-group">
+                    <label for="reviewCommentInput">教师评语</label>
+                    <textarea id="reviewCommentInput" rows="4"
+                              placeholder="请输入实验报告审核意见"></textarea>
+                </div>
+
+                <div class="review-actions">
+                    <button type="button" class="btn btn-danger" id="rejectBtn">
+                        驳回报告
+                    </button>
+                    <button type="button" class="btn btn-success" id="approveBtn">
+                        审核通过
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast hidden"></div>
+
+<script src="/js/admin-submissions.js"></script>
+</body>
+</html>

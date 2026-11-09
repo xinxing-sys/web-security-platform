@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用户管理 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/admin-users.css">
+</head>
+<body>
+<div class="page-container">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <h1>用户管理</h1>
+                <p>Web 漏洞实验教学平台 · 管理后台</p>
+            </div>
+        </div>
+        <a class="back-link" href="/admin">返回管理工作台</a>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <div>
+                <h2>用户管理中心</h2>
+                <p>查看平台用户信息，管理用户账号状态与角色权限。</p>
+            </div>
+            <div class="welcome-tag">ADMINISTRATION</div>
+        </section>
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <span class="stat-label">用户总数</span>
+                <strong id="totalUsers">--</strong>
+                <span class="stat-desc">平台全部用户</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">启用用户</span>
+                <strong id="enabledUsers">--</strong>
+                <span class="stat-desc">正常使用账号</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-label">禁用用户</span>
+                <strong id="disabledUsers">--</strong>
+                <span class="stat-desc">暂不可登录账号</span>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h3>用户列表</h3>
+                    <p>支持按用户名、昵称、角色和账号状态筛选</p>
+                </div>
+                <button type="button" class="btn btn-light" id="resetButton">重置筛选</button>
+            </div>
+
+            <div class="filter-grid">
+                <div class="form-item">
+                    <label for="usernameInput">用户名</label>
+                    <input id="usernameInput" type="text" placeholder="输入用户名">
+                </div>
+                <div class="form-item">
+                    <label for="nicknameInput">昵称</label>
+                    <input id="nicknameInput" type="text" placeholder="输入用户昵称">
+                </div>
+                <div class="form-item">
+                    <label for="roleFilter">用户角色</label>
+                    <select id="roleFilter">
+                        <option value="">全部角色</option>
+                        <option value="STUDENT">学生</option>
+                        <option value="ADMIN">管理员</option>
+                    </select>
+                </div>
+                <div class="form-item">
+                    <label for="statusFilter">账号状态</label>
+                    <select id="statusFilter">
+                        <option value="">全部状态</option>
+                        <option value="1">启用</option>
+                        <option value="0">禁用</option>
+                    </select>
+                </div>
+                <div class="filter-actions">
+                    <button type="button" class="btn btn-primary" id="searchButton">查询用户</button>
+                </div>
+            </div>
+
+            <div class="table-toolbar">
+                <span id="resultText">正在加载用户...</span>
+                <span>每页显示
+                    <select id="pageSize">
+                        <option value="10">10 条</option>
+                        <option value="20">20 条</option>
+                        <option value="50">50 条</option>
+                    </select>
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>用户名</th>
+                        <th>昵称</th>
+                        <th>邮箱</th>
+                        <th>角色</th>
+                        <th>状态</th>
+                        <th>注册时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                    <tr>
+                        <td colspan="8" class="empty-cell">正在加载...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span id="pageInfo">第 1 页</span>
+                <div class="page-buttons">
+                    <button type="button" class="btn btn-light" id="prevButton">上一页</button>
+                    <button type="button" class="btn btn-light" id="nextButton">下一页</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="modal-mask" id="detailModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h3>用户详情</h3>
+                <p>查看用户资料并调整账号权限</p>
+            </div>
+            <button type="button" class="close-button" id="closeModal">×</button>
+        </div>
+
+        <div id="detailContent" class="detail-content">
+            <div class="empty-cell">正在加载用户详情...</div>
+        </div>
+
+        <div class="permission-box">
+            <div class="form-item">
+                <label for="detailRole">用户角色</label>
+                <select id="detailRole">
+                    <option value="STUDENT">学生</option>
+                    <option value="ADMIN">管理员</option>
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="saveRoleButton">保存角色修改</button>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-light" id="closeModalBottom">关闭</button>
+        </div>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="/js/admin-users.js"></script>
+</body>
+</html>

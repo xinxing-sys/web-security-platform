@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>实验资源管理 - Web安全实验教学平台</title>
+    <link rel="stylesheet" th:href="@{/css/admin-experiments.css}">
+</head>
+<body>
+<div class="page">
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">S</div>
+            <div>
+                <h1>实验资源管理</h1>
+                <p>Web Security Learning Platform</p>
+            </div>
+        </div>
+        <a class="back-link" href="/admin">返回管理员工作台</a>
+    </header>
+
+    <main>
+        <section class="intro">
+            <div>
+                <div class="eyebrow">ADMINISTRATION</div>
+                <h2>实验资源管理</h2>
+                <p>管理平台实验内容、实验分类及靶场配置。</p>
+            </div>
+            <button class="primary-btn" id="addExperimentBtn">＋ 新增实验</button>
+        </section>
+
+        <section class="stats">
+            <div class="stat-card">
+                <span>实验总数</span>
+                <strong id="totalCount">--</strong>
+            </div>
+            <div class="stat-card">
+                <span>已启用</span>
+                <strong id="enabledCount">--</strong>
+            </div>
+            <div class="stat-card">
+                <span>已停用</span>
+                <strong id="disabledCount">--</strong>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h3>实验列表</h3>
+                    <p>查询、编辑和维护平台实验资源</p>
+                </div>
+            </div>
+
+            <div class="filters">
+                <input id="keyword" type="text" placeholder="输入实验名称或关键词">
+                <select id="categoryFilter">
+                    <option value="">全部分类</option>
+                </select>
+                <select id="difficultyFilter">
+                    <option value="">全部难度</option>
+                    <option value="BEGINNER">入门</option>
+                    <option value="INTERMEDIATE">中级</option>
+                    <option value="ADVANCED">高级</option>
+                </select>
+                <select id="statusFilter">
+                    <option value="">全部状态</option>
+                    <option value="1">启用</option>
+                    <option value="0">停用</option>
+                </select>
+                <button class="primary-btn" id="searchBtn">查询</button>
+                <button class="light-btn" id="resetBtn">重置</button>
+            </div>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>实验名称</th>
+                        <th>分类ID</th>
+                        <th>难度</th>
+                        <th>靶场类型</th>
+                        <th>状态</th>
+                        <th>更新时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="experimentTable">
+                    <tr>
+                        <td colspan="8" class="empty">正在加载...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span id="pageInfo">共 0 条记录</span>
+                <div class="page-controls">
+                    <select id="pageSize">
+                        <option value="10">10条/页</option>
+                        <option value="20">20条/页</option>
+                        <option value="50">50条/页</option>
+                    </select>
+                    <button class="light-btn" id="prevPage">上一页</button>
+                    <span id="currentPage">1 / 1</span>
+                    <button class="light-btn" id="nextPage">下一页</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+<div class="modal-mask" id="experimentModal">
+    <div class="modal">
+        <div class="modal-header">
+            <div>
+                <h3 id="modalTitle">新增实验</h3>
+                <p>请填写实验资源信息</p>
+            </div>
+            <button class="close-btn" id="closeModal">×</button>
+        </div>
+
+        <form id="experimentForm">
+            <input type="hidden" id="experimentId">
+
+            <div class="form-grid">
+                <div class="form-item">
+                    <label for="name">实验名称 *</label>
+                    <input id="name" maxlength="200" required placeholder="请输入实验名称">
+                </div>
+
+                <div class="form-item">
+                    <label for="categoryId">实验分类 *</label>
+                    <select id="categoryId" required>
+                        <option value="">请选择实验分类</option>
+                    </select>
+                </div>
+
+                <div class="form-item">
+                    <label for="difficulty">实验难度 *</label>
+                    <select id="difficulty" required>
+                        <option value="BEGINNER">入门</option>
+                        <option value="INTERMEDIATE">中级</option>
+                        <option value="ADVANCED">高级</option>
+                    </select>
+                </div>
+
+                <div class="form-item">
+                    <label for="platformType">靶场类型</label>
+                    <input id="platformType" value="WEBGOAT" maxlength="30">
+                </div>
+
+                <div class="form-item full">
+                    <label for="target">实验目标</label>
+                    <textarea id="target" rows="2" placeholder="描述本实验需要达到的学习目标"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="description">实验描述</label>
+                    <textarea id="description" rows="3" placeholder="请输入实验内容介绍"></textarea>
+                </div>
+
+                <div class="form-item full">
+                    <label for="steps">实验步骤</label>
+                    <textarea id="steps" rows="5" placeholder="请输入实验操作步骤"></textarea>
+                </div>
+
+                <div class="form-item">
+                    <label for="platformUrl">靶场地址</label>
+                    <input id="platformUrl" maxlength="500" placeholder="例如 http://localhost:8081">
+                </div>
+
+                <div class="form-item">
+                    <label for="lessonCode">WebGoat 关卡代码</label>
+                    <input id="lessonCode" maxlength="100" placeholder="例如 SqlInjection.lesson">
+                </div>
+
+                <div class="form-item">
+                    <label for="status">实验状态</label>
+                    <select id="status">
+                        <option value="1">启用</option>
+                        <option value="0">停用</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="light-btn" id="cancelModal">取消</button>
+                <button type="submit" class="primary-btn" id="saveBtn">保存实验</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script th:src="@{/js/admin-experiments.js}"></script>
+</body>
+</html>
