@@ -888,3 +888,229 @@ a {
         transition: none;
     }
 }
+
+/* =========================================
+   学生端漏洞知识搜索与分类筛选
+========================================= */
+
+.knowledge-filter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 18px;
+    padding: 17px;
+    border: 1px solid #e8edf5;
+    border-radius: 12px;
+    background: #ffffff;
+}
+
+.knowledge-search {
+    display: flex;
+    flex: 1;
+    gap: 9px;
+    min-width: 200px;
+}
+
+.knowledge-search input {
+    flex: 1;
+    min-width: 0;
+    height: 40px;
+    padding: 0 13px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    outline: none;
+    font-size: 13px;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.knowledge-search input:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+}
+
+.knowledge-search-button {
+    height: 40px;
+    padding: 0 20px;
+    border: none;
+    border-radius: 7px;
+    background: #2563eb;
+    color: white;
+    font-size: 13px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.knowledge-search-button:hover {
+    background: #1d4ed8;
+}
+
+.knowledge-filter-right {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+}
+
+.knowledge-filter-right label {
+    white-space: nowrap;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.knowledge-filter-right select {
+    width: 145px;
+    height: 40px;
+    padding: 0 10px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    outline: none;
+    background: white;
+    color: #475569;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.knowledge-filter-right select:focus {
+    border-color: #2563eb;
+}
+
+.knowledge-reset-button {
+    height: 40px;
+    padding: 0 13px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    background: white;
+    color: #64748b;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.knowledge-reset-button:hover {
+    background: #f1f5f9;
+    color: #2563eb;
+}
+
+.knowledge-result-bar {
+    margin-bottom: 14px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+.knowledge-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 18px;
+    margin-top: 22px;
+    color: #64748b;
+    font-size: 12px;
+}
+
+.knowledge-page-button {
+    min-width: 85px;
+    height: 34px;
+    padding: 0 12px;
+    border: 1px solid #dce3ed;
+    border-radius: 7px;
+    background: white;
+    color: #475569;
+    font-size: 12px;
+    cursor: pointer;
+    transition: background .2s;
+}
+
+.knowledge-page-button:hover:not(:disabled) {
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    color: #2563eb;
+}
+
+.knowledge-page-button:disabled {
+    cursor: not-allowed;
+    opacity: .45;
+}
+
+.knowledge-empty {
+    grid-column: 1 / -1;
+    padding: 45px 20px;
+    border: 1px dashed #dce3ed;
+    border-radius: 12px;
+    background: #ffffff;
+    text-align: center;
+}
+
+.knowledge-empty-icon {
+    margin-bottom: 12px;
+    color: #94a3b8;
+    font-size: 35px;
+}
+
+.knowledge-empty h3 {
+    color: #475569;
+    font-size: 15px;
+}
+
+.knowledge-empty p {
+    margin-top: 9px;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+@media (max-width: 900px) {
+
+    .knowledge-filter {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .knowledge-filter-right {
+        justify-content: space-between;
+    }
+
+    .knowledge-filter-right select {
+        flex: 1;
+    }
+
+}
+
+@media (max-width: 550px) {
+
+    .knowledge-filter {
+        padding: 13px;
+    }
+
+    .knowledge-search {
+        min-width: 0;
+    }
+
+    .knowledge-search input {
+        width: 100%;
+        font-size: 12px;
+    }
+
+    .knowledge-search-button {
+        padding: 0 14px;
+    }
+
+    .knowledge-filter-right {
+        flex-wrap: wrap;
+    }
+
+    .knowledge-filter-right label {
+        width: 100%;
+    }
+
+    .knowledge-filter-right select {
+        min-width: 0;
+    }
+
+    .knowledge-reset-button {
+        padding: 0 10px;
+    }
+
+    .knowledge-pagination {
+        gap: 10px;
+    }
+
+}

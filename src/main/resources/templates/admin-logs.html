@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>操作日志审计 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/design-tokens.css">
+    <link rel="stylesheet" href="/css/admin-logs.css">
+</head>
+<body>
+<div class="page-container">
+
+    <header class="topbar">
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <div>
+                <h1>操作日志审计</h1>
+                <p>Web 漏洞实验教学平台 · 管理后台</p>
+            </div>
+        </div>
+        <a class="back-link" href="/admin">返回管理工作台</a>
+    </header>
+
+    <main>
+        <section class="welcome">
+            <div>
+                <h2>系统操作日志</h2>
+                <p>记录并审计平台关键操作，帮助管理员追踪系统使用情况。</p>
+            </div>
+            <div class="welcome-tag">SYSTEM AUDIT</div>
+        </section>
+
+        <section class="summary-grid">
+            <div class="summary-card">
+                <span>日志总数</span>
+                <strong id="totalLogs">--</strong>
+                <small>符合当前筛选条件的记录</small>
+            </div>
+            <div class="summary-card">
+                <span>当前页记录</span>
+                <strong id="currentLogs">--</strong>
+                <small>当前页面显示数量</small>
+            </div>
+            <div class="summary-card">
+                <span>当前页数</span>
+                <strong id="currentPage">--</strong>
+                <small>当前查询页码</small>
+            </div>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <div>
+                    <h3>日志筛选</h3>
+                    <p>支持按用户名、操作描述和操作时间查询</p>
+                </div>
+                <button type="button" class="btn btn-light" id="resetButton">
+                    重置筛选
+                </button>
+            </div>
+
+            <div class="filter-grid">
+                <div class="form-item">
+                    <label for="usernameInput">操作用户名</label>
+                    <input
+                            id="usernameInput"
+                            type="text"
+                            maxlength="50"
+                            placeholder="输入用户名"
+                    >
+                </div>
+
+                <div class="form-item">
+                    <label for="operationInput">操作描述</label>
+                    <input
+                            id="operationInput"
+                            type="text"
+                            maxlength="150"
+                            placeholder="例如：用户登录"
+                    >
+                </div>
+
+                <div class="form-item">
+                    <label for="startTime">开始时间</label>
+                    <input id="startTime" type="datetime-local">
+                </div>
+
+                <div class="form-item">
+                    <label for="endTime">结束时间</label>
+                    <input id="endTime" type="datetime-local">
+                </div>
+
+                <div class="filter-actions">
+                    <button type="button" class="btn btn-primary" id="searchButton">
+                        查询日志
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-toolbar">
+                <span id="resultText">正在加载日志...</span>
+
+                <span>
+                    每页显示
+                    <select id="pageSize">
+                        <option value="10">10 条</option>
+                        <option value="20">20 条</option>
+                        <option value="50">50 条</option>
+                        <option value="100">100 条</option>
+                    </select>
+                </span>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th>日志ID</th>
+                        <th>操作用户</th>
+                        <th>角色</th>
+                        <th>操作描述</th>
+                        <th>请求方式</th>
+                        <th>请求地址</th>
+                        <th>IP地址</th>
+                        <th>响应状态</th>
+                        <th>耗时</th>
+                        <th>操作时间</th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="logTableBody">
+                    <tr>
+                        <td colspan="10" class="empty-cell">正在加载...</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="pagination">
+                <span id="pageInfo">第 1 页</span>
+                <div class="page-buttons">
+                    <button type="button" class="btn btn-light" id="prevButton">
+                        上一页
+                    </button>
+                    <button type="button" class="btn btn-light" id="nextButton">
+                        下一页
+                    </button>
+                </div>
+            </div>
+
+            <div id="errorMessage" class="error-message hidden"></div>
+        </section>
+
+        <section class="notice">
+            <strong>审计说明</strong>
+            <p>
+                系统日志记录关键数据写入操作，不保存用户密码、请求正文及附件内容。
+                普通查询请求不会产生操作日志。
+            </p>
+        </section>
+    </main>
+</div>
+
+<div id="toast" class="toast"></div>
+
+<script src="/js/admin-logs.js"></script>
+</body>
+</html>

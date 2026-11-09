@@ -107,6 +107,20 @@ public class PageController {
 
 
 
+    /**
+     * 学生学习分析页面
+     */
+    @GetMapping("/student/learning")
+    public String studentLearning(HttpServletRequest request) {
+        if (!isStudent(request)) {
+            return "redirect:/login";
+        }
+        return "student-learning";
+    }
+
+
+
+
 
     /**
      * 管理员实验资源管理页面
@@ -117,6 +131,18 @@ public class PageController {
             return "redirect:/login";
         }
         return "admin-experiments";
+    }
+
+
+    /**
+     * 管理员操作日志页面
+     */
+    @GetMapping("/admin/logs")
+    public String adminLogs(HttpServletRequest request) {
+        if (!isAdmin(request)) {
+            return "redirect:/login";
+        }
+        return "admin-logs";
     }
 
     /**

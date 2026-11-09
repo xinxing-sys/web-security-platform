@@ -25,7 +25,7 @@
         <a href="#experiments" class="nav-item">实验资源</a>
         <a href="#vulnerabilities" class="nav-item">漏洞知识</a>
         <a href="#tasks" class="nav-item">我的任务</a>
-
+        <a href="/student/learning" class="nav-item">学习分析</a>
         <div class="sidebar-bottom">
             <div class="sidebar-user">
                 <div class="avatar" id="sidebarAvatar">学</div>
@@ -111,8 +111,76 @@
                 <span class="section-tag">KNOWLEDGE</span>
             </div>
 
+            <!-- 漏洞知识搜索和分类筛选 -->
+            <div class="knowledge-filter">
+
+                <div class="knowledge-search">
+                    <input
+                            type="text"
+                            id="knowledgeKeyword"
+                            maxlength="100"
+                            placeholder="输入漏洞名称，例如：SQL 注入、XSS"
+                            autocomplete="off"
+                    >
+
+                    <button
+                            type="button"
+                            id="knowledgeSearchButton"
+                            class="knowledge-search-button"
+                    >
+                        搜索
+                    </button>
+                </div>
+
+                <div class="knowledge-filter-right">
+                    <label for="knowledgeCategory">漏洞分类</label>
+
+                    <select id="knowledgeCategory">
+                        <option value="">全部分类</option>
+                    </select>
+
+                    <button
+                            type="button"
+                            id="knowledgeResetButton"
+                            class="knowledge-reset-button"
+                    >
+                        清空筛选
+                    </button>
+                </div>
+
+            </div>
+
+            <!-- 搜索结果信息 -->
+            <div class="knowledge-result-bar">
+                <span id="knowledgeResultText">正在加载漏洞知识...</span>
+            </div>
+
+            <!-- 漏洞知识列表 -->
             <div id="vulnerabilityList" class="knowledge-list">
                 <div class="loading">正在加载漏洞知识...</div>
+            </div>
+
+            <!-- 分页 -->
+            <div class="knowledge-pagination">
+                <button
+                        type="button"
+                        id="knowledgePrevButton"
+                        class="knowledge-page-button"
+                        disabled
+                >
+                    上一页
+                </button>
+
+                <span id="knowledgePageInfo">第 1 页</span>
+
+                <button
+                        type="button"
+                        id="knowledgeNextButton"
+                        class="knowledge-page-button"
+                        disabled
+                >
+                    下一页
+                </button>
             </div>
         </section>
 
@@ -143,6 +211,8 @@
                 </table>
             </div>
         </section>
+
+
 
         <footer class="footer">
             基于 Java Web 的 Web 漏洞实验教学平台
