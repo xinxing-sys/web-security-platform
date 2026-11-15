@@ -30,6 +30,35 @@ async function requestLabList() {
     return Array.isArray(result.data) ? result.data : [];
 }
 
+/**
+ * 调用管理员靶场操作接口
+ */
+async function requestLabAction(id, action) {
+    const response = await fetch(
+        `${labApiUrl}/${encodeURIComponent(id)}/${action}`,
+        {
+            method: "POST",
+            credentials: "same-origin",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }
+    );
+
+    if (response.status === 401 || response.status === 403) {
+        window.location.href = "/login";
+        throw new Error("登录状态已失效，请重新登录");
+    }
+
+    const result = await response.json();
+
+    if (!response.ok || !result.success) {
+        throw new Error(result.message || "实例操作失败");
+    }
+
+    return result;
+}
+
 function getStatusClass(status) {
     switch (status) {
         case "RUNNING":
@@ -72,13 +101,89 @@ function formatDate(value) {
     return escapeHtml(String(value).replace("T", " "));
 }
 
+/**
+ * 根据实例状态生成可执行操作。
+ */
+function renderActions(lab) {
+    const id = Number(lab.id);
+
+    if (!Number.isSafeInteger(id) || id <= 0) {
+        return '<span class="action-disabled">不可操作</span>';
+    }
+
+    const status = lab.status;
+
+    if (status === "STARTING" || status === "STOPPING") {
+        return '<span class="action-disabled">处理中</span>';
+    }
+
+    if (status === "RUNNING") {
+        return `
+            <div class="action-group">
+                <button
+                    class="action-button action-stop"
+                    data-action="stop"
+                    data-id="${id}">
+                    停止
+                </button>
+                <button
+                    class="action-button action-reclaim"
+                    data-action="reclaim"
+                    data-id="${id}">
+                    回收
+                </button>
+            </div>
+        `;
+    }
+
+    if (status === "STOPPED") {
+        return `
+            <div class="action-group">
+                <button
+                    class="action-button action-restart"
+                    data-action="restart"
+                    data-id="${id}">
+                    重新启动
+                </button>
+                <button
+                    class="action-button action-reclaim"
+                    data-action="reclaim"
+                    data-id="${id}">
+                    回收
+                </button>
+            </div>
+        `;
+    }
+
+    if (status === "FAILED" || status === "EXPIRED") {
+        return `
+            <div class="action-group">
+                <button
+                    class="action-button action-restart"
+                    data-action="restart"
+                    data-id="${id}">
+                    尝试启动
+                </button>
+                <button
+                    class="action-button action-reclaim"
+                    data-action="reclaim"
+                    data-id="${id}">
+                    回收
+                </button>
+            </div>
+        `;
+    }
+
+    return '<span class="action-disabled">暂无操作</span>';
+}
+
 function renderLabRows(labs) {
     const tbody = document.getElementById("labTableBody");
 
     if (!labs.length) {
         tbody.innerHTML = `
             <tr>
-                <td colspan="10" class="empty-cell">
+                <td colspan="11" class="empty-cell">
                     暂无靶场实例记录
                 </td>
             </tr>
@@ -87,7 +192,6 @@ function renderLabRows(labs) {
     }
 
     tbody.innerHTML = labs.map(lab => {
-        const status = escapeHtml(lab.status);
         const statusClass = getStatusClass(lab.status);
 
         let accessCell = "--";
@@ -122,6 +226,7 @@ function renderLabRows(labs) {
                 </td>
                 <td>${formatDate(lab.startedAt)}</td>
                 <td>${accessCell}</td>
+                <td>${renderActions(lab)}</td>
             </tr>
         `;
     }).join("");
@@ -145,6 +250,24 @@ function updateStatistics(labs) {
         labs.filter(item =>
             item.status === "STOPPED"
         ).length;
+}
+
+function showError(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    const successMessage = document.getElementById("successMessage");
+
+    successMessage.hidden = true;
+    errorMessage.textContent = message;
+    errorMessage.hidden = false;
+}
+
+function showSuccess(message) {
+    const errorMessage = document.getElementById("errorMessage");
+    const successMessage = document.getElementById("successMessage");
+
+    errorMessage.hidden = true;
+    successMessage.textContent = message;
+    successMessage.hidden = false;
 }
 
 async function loadLabList() {
@@ -176,7 +299,7 @@ async function loadLabList() {
 
         document.getElementById("labTableBody").innerHTML = `
             <tr>
-                <td colspan="10" class="empty-cell">
+                <td colspan="11" class="empty-cell">
                     实例数据加载失败
                 </td>
             </tr>
@@ -187,9 +310,79 @@ async function loadLabList() {
     }
 }
 
+/**
+ * 管理员实例操作事件
+ */
+async function handleLabAction(event) {
+    const button = event.target.closest("button[data-action][data-id]");
+
+    if (!button) {
+        return;
+    }
+
+    const id = button.dataset.id;
+    const action = button.dataset.action;
+
+    const actionConfig = {
+        stop: {
+            title: "确定停止该实例吗？",
+            message: "停止后 Web 和数据库容器将停止，但容器、网络和数据库数据卷会保留。",
+            success: "实例已停止"
+        },
+        restart: {
+            title: "确定重新启动该实例吗？",
+            message: "系统将使用原来的端口和数据库数据卷重新启动该实例。",
+            success: "实例重新启动成功"
+        },
+        reclaim: {
+            title: "确定回收该实例吗？",
+            message: "回收将删除该实例的容器和网络，但会保留数据库数据卷和实例记录。之后仍可尝试重新启动。请确认。",
+            success: "实例容器和网络已回收，数据卷已保留"
+        }
+    };
+
+    const config = actionConfig[action];
+
+    if (!config) {
+        return;
+    }
+
+    if (!window.confirm(`${config.title}\n\n${config.message}`)) {
+        return;
+    }
+
+    const actionButtons = document.querySelectorAll(
+        `button[data-id="${CSS.escape(id)}"]`
+    );
+
+    actionButtons.forEach(item => {
+        item.disabled = true;
+    });
+
+    try {
+        await requestLabAction(id, action);
+
+        showSuccess(config.success);
+
+        await loadLabList();
+
+    } catch (error) {
+        console.error("靶场实例操作失败：", error);
+        showError(error.message || "靶场实例操作失败");
+
+    } finally {
+        actionButtons.forEach(item => {
+            item.disabled = false;
+        });
+    }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("refreshButton")
         .addEventListener("click", loadLabList);
+
+    document.getElementById("labTableBody")
+        .addEventListener("click", handleLabAction);
 
     loadLabList();
 });
