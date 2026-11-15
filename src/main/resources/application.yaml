@@ -32,3 +32,12 @@ mybatis-plus:
 app:
   upload:
     storage-dir: uploads/submissions
+
+
+  docker:
+    executable: "C:/Program Files/Docker/Docker/resources/bin/docker.exe"
+    compose-file: "D:/GraduationProject/tools/DVWA/managed/compose.yml"
+    instances-dir: "D:/GraduationProject/tools/DVWA/managed/instances"
+    port-start: 4292
+    port-end: 4399
+    start-timeout-seconds: 180
