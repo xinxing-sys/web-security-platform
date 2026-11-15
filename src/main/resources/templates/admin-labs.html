@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>靶场实例管理 - Web漏洞实验教学平台</title>
+    <link rel="stylesheet" href="/css/design-tokens.css">
+    <link rel="stylesheet" href="/css/admin-labs.css">
+</head>
+<body>
+
+<header class="header">
+    <div class="brand">Web漏洞实验教学平台</div>
+    <div class="header-actions">
+        <a href="/admin" class="back-link">返回管理工作台</a>
+        <button id="refreshButton" class="button button-primary">刷新列表</button>
+    </div>
+</header>
+
+<main class="container">
+    <section class="page-heading">
+        <div>
+            <h1>靶场实例管理</h1>
+            <p>查看学生创建的 DVWA 实例及 Docker 容器运行状态。</p>
+        </div>
+    </section>
+
+    <section class="stat-grid">
+        <article class="stat-card">
+            <div class="stat-label">实例总数</div>
+            <div class="stat-value" id="totalCount">--</div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-label">运行中的实例</div>
+            <div class="stat-value" id="runningCount">--</div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-label">异常实例</div>
+            <div class="stat-value" id="failedCount">--</div>
+        </article>
+        <article class="stat-card">
+            <div class="stat-label">已停止实例</div>
+            <div class="stat-value" id="stoppedCount">--</div>
+        </article>
+    </section>
+
+    <section class="panel">
+        <div class="panel-heading">
+            <div>
+                <h2>实例列表</h2>
+                <p>容器状态来自 Docker 实际运行情况。</p>
+            </div>
+            <span id="loadStatus" class="load-status">等待加载</span>
+        </div>
+
+        <div id="errorMessage" class="error-message" hidden></div>
+
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                <tr>
+                    <th>实例 ID</th>
+                    <th>学生 ID</th>
+                    <th>任务 ID</th>
+                    <th>实例名称</th>
+                    <th>访问端口</th>
+                    <th>Web 容器</th>
+                    <th>数据库容器</th>
+                    <th>实例状态</th>
+                    <th>启动时间</th>
+                    <th>访问入口</th>
+                </tr>
+                </thead>
+                <tbody id="labTableBody">
+                <tr>
+                    <td colspan="10" class="empty-cell">正在加载实例数据...</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <footer class="page-footer">
+        基于 Java Web 的 Web 漏洞实验教学平台
+    </footer>
+</main>
+
+<script src="/js/admin-labs.js"></script>
+</body>
+</html>

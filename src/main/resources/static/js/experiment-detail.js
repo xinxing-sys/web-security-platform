@@ -4,6 +4,7 @@
  */
 let currentExperiment = null;
 let currentTask = null;
+let currentLabSession = null;
 
 /**
  * HTML 转义
@@ -61,14 +62,45 @@ function setButton(text, disabled = false) {
 }
 
 /**
+ * 设置靶场入口
+ */
+function setLabLink(accessUrl) {
+    const labLink = document.getElementById("labLink");
+
+    if (!accessUrl) {
+        labLink.hidden = true;
+        labLink.removeAttribute("href");
+        return;
+    }
+
+    try {
+        const url = new URL(accessUrl);
+
+        // 只允许本机DVWA地址
+        if (
+            !["http:", "https:"].includes(url.protocol) ||
+            !["localhost", "127.0.0.1"].includes(url.hostname)
+        ) {
+            throw new Error("靶场地址不符合本机实验环境要求");
+        }
+
+        labLink.href = url.href;
+        labLink.hidden = false;
+
+    } catch (error) {
+        labLink.hidden = true;
+        labLink.removeAttribute("href");
+        showMessage(error.message, true);
+    }
+}
+
+/**
  * 渲染当前任务状态
  */
 function renderTaskState() {
     const description = document.getElementById("taskDescription");
-    const labLink = document.getElementById("labLink");
 
-    labLink.hidden = true;
-    labLink.removeAttribute("href");
+    setLabLink(null);
 
     if (!currentTask) {
         description.textContent =
@@ -80,79 +112,38 @@ function renderTaskState() {
 
     switch (currentTask.status) {
         case "CLAIMED":
-            description.textContent = "你已经领取该实验，可以开始实验。";
+            description.textContent =
+                "你已经领取该实验，可以开始实验。";
+
             setButton("开始实验");
             break;
 
         case "IN_PROGRESS":
-            description.textContent = "实验正在进行中，可以进入靶场继续练习。";
-            setButton("实验进行中", true);
-            showLabLink();
+            description.textContent =
+                "实验正在进行中。点击下方按钮启动或进入专属DVWA靶场。";
+
+            setButton("启动 / 进入DVWA靶场");
             break;
 
         case "SUBMITTED":
-            description.textContent = "实验报告已经提交，请等待教师审核。";
+            description.textContent =
+                "实验报告已经提交，请等待教师审核。";
+
             setButton("等待教师审核", true);
             break;
 
         case "COMPLETED":
-            description.textContent = "该实验任务已经完成。";
+            description.textContent =
+                "该实验任务已经完成。";
+
             setButton("任务已完成", true);
             break;
 
         default:
-            description.textContent = "当前任务状态暂不支持操作。";
+            description.textContent =
+                "当前任务状态暂不支持操作。";
+
             setButton("暂不可操作", true);
-    }
-}
-
-/**
- * 解析靶场地址
- *
- * 只允许本机 WebGoat 地址，避免跳转到未知外部网站。
- */
-function getLabUrl() {
-    const configuredUrl = currentExperiment?.platformUrl;
-    const lessonCode = currentExperiment?.lessonCode;
-
-    // 优先使用实验配置的完整地址
-    if (configuredUrl && configuredUrl.trim()) {
-        const url = new URL(configuredUrl.trim());
-
-        if (
-            !["http:", "https:"].includes(url.protocol) ||
-            !["localhost", "127.0.0.1"].includes(url.hostname)
-        ) {
-            throw new Error("实验靶场地址不符合本机实验环境要求");
-        }
-
-        return url.href;
-    }
-
-    // 没有配置完整地址时，根据 WebGoat 课程编号生成入口
-    if (
-        currentExperiment?.platformType === "WEBGOAT" &&
-        lessonCode &&
-        /^[a-zA-Z0-9_-]+\.lesson$/.test(lessonCode)
-    ) {
-        return `http://localhost:8081/WebGoat/start.mvc?username=student01#lesson/${lessonCode}`;
-    }
-
-    throw new Error("实验尚未配置有效的靶场入口或课程编号");
-}
-
-/**
- * 显示进入靶场入口
- */
-function showLabLink() {
-    try {
-        const labLink = document.getElementById("labLink");
-
-        labLink.href = getLabUrl();
-        labLink.hidden = false;
-
-    } catch (error) {
-        showMessage(error.message, true);
     }
 }
 
@@ -222,10 +213,44 @@ async function loadMyTask() {
 
         renderTaskState();
 
+        // 如果任务正在进行且实验类型为DVWA，
+        // 尝试查询是否已经有可复用的靶场实例。
+        if (
+            currentTask &&
+            currentTask.status === "IN_PROGRESS" &&
+            currentExperiment.platformType === "DVWA"
+        ) {
+            await loadExistingLabSession();
+        }
+
     } catch (error) {
         console.error("查询任务状态失败：", error);
+
         showMessage(error.message, true);
         setButton("暂时无法查询任务", true);
+    }
+}
+
+/**
+ * 查询已有的DVWA实例
+ */
+async function loadExistingLabSession() {
+    try {
+        currentLabSession = await apiRequest(
+            `/api/labs/tasks/${encodeURIComponent(currentTask.id)}`
+        );
+
+        if (
+            currentLabSession &&
+            currentLabSession.status === "RUNNING"
+        ) {
+            setLabLink(currentLabSession.accessUrl);
+        }
+
+    } catch (error) {
+        // 尚未创建实例时不显示错误，
+        // 学生点击启动按钮后再创建。
+        console.info("当前任务尚无可复用的DVWA实例：", error.message);
     }
 }
 
@@ -268,7 +293,7 @@ async function startExperiment() {
         return;
     }
 
-    setButton("正在启动...", true);
+    setButton("正在开始实验...", true);
 
     try {
         currentTask = await apiRequest(
@@ -278,7 +303,7 @@ async function startExperiment() {
             }
         );
 
-        showMessage("实验已经开始，可以进入靶场了！");
+        showMessage("实验已经开始，可以启动DVWA靶场了！");
         renderTaskState();
 
     } catch (error) {
@@ -288,7 +313,66 @@ async function startExperiment() {
 }
 
 /**
- * 领取 / 开始按钮事件
+ * 启动或复用DVWA实例
+ */
+async function startDvwaLab() {
+    if (!currentTask || !currentTask.id) {
+        showMessage("请先领取并开始实验", true);
+        return;
+    }
+
+    if (currentTask.status !== "IN_PROGRESS") {
+        showMessage("请先开始实验，再进入靶场", true);
+        return;
+    }
+
+    if (currentExperiment.platformType !== "DVWA") {
+        showMessage(
+            "当前实验尚未配置为DVWA平台，请联系管理员检查实验配置。",
+            true
+        );
+        return;
+    }
+
+    setButton("正在启动DVWA，请稍候...", true);
+    setLabLink(null);
+
+    try {
+        currentLabSession = await apiRequest(
+            `/api/labs/tasks/${encodeURIComponent(currentTask.id)}/start`,
+            {
+                method: "POST"
+            }
+        );
+
+        if (
+            !currentLabSession ||
+            currentLabSession.status !== "RUNNING" ||
+            !currentLabSession.accessUrl
+        ) {
+            throw new Error(
+                "靶场启动请求已返回，但实例尚未处于可用状态"
+            );
+        }
+
+        setLabLink(currentLabSession.accessUrl);
+
+        showMessage(
+            "DVWA靶场启动成功！点击“进入DVWA实验环境”即可开始实验。"
+        );
+
+        setButton("重新检查 / 进入DVWA靶场");
+
+    } catch (error) {
+        console.error("启动DVWA失败：", error);
+
+        showMessage(error.message, true);
+        setButton("重新启动DVWA靶场");
+    }
+}
+
+/**
+ * 领取、开始和启动靶场按钮事件
  */
 document.getElementById("claimButton")
     .addEventListener("click", async function () {
@@ -300,6 +384,11 @@ document.getElementById("claimButton")
 
         if (currentTask.status === "CLAIMED") {
             await startExperiment();
+            return;
+        }
+
+        if (currentTask.status === "IN_PROGRESS") {
+            await startDvwaLab();
         }
     });
 

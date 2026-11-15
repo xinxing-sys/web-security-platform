@@ -207,6 +207,12 @@ public class DockerComposeManager {
      *
      * 不使用 -v，避免删除数据库卷。
      */
+
+    /**
+     * 停止指定Docker Compose项目中的容器。
+     *
+     * 保留容器、网络和数据库数据卷。
+     */
     public String stop(
             String projectName,
             Path envFile) {
@@ -216,10 +222,31 @@ public class DockerComposeManager {
                 envFile
         );
 
-        command.add("down");
+        command.add("stop");
 
         return execute(command);
     }
+
+    /**
+     * 回收指定Docker Compose项目的容器和网络。
+     *
+     * 不使用 -v，保留数据库数据卷。
+     */
+    public String reclaim(
+            String projectName,
+            Path envFile) {
+
+        List<String> command = composeCommand(
+                projectName,
+                envFile
+        );
+
+        command.add("down");
+        command.add("--remove-orphans");
+
+        return execute(command);
+    }
+
 
     /**
      * 检查容器是否处于运行状态。
